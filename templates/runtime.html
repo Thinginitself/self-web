@@ -25,65 +25,6 @@
             function(ec) {
                 // 基于准备好的dom，初始化echarts图表
                 myChart = ec.init(document.getElementById('main'));
-
-{#                var option = {#}
-{#                    title: {#}
-{#                        text: 'Goal Satisfaction Degree',#}
-{#                    },#}
-{#                    tooltip: {#}
-{#                        trigger: 'axis'#}
-{#                    },#}
-{#                    legend: {#}
-{#                        show: true,#}
-{#                        y:'bottom',#}
-{#                        padding: 0,#}
-{#                        data: []#}
-{#                    },#}
-{#                    toolbox: {#}
-{#                        show: true,#}
-{#                        feature: {#}
-{#                            mark: {#}
-{#                                show: true#}
-{#                            },#}
-{#                            dataView: {#}
-{#                                show: true,#}
-{#                                readOnly: false#}
-{#                            },#}
-{#                            magicType: {#}
-{#                                show: true,#}
-{#                                type: ['line', 'bar']#}
-{#                            },#}
-{#                            restore: {#}
-{#                                show: true#}
-{#                            },#}
-{#                            saveAsImage: {#}
-{#                                show: true#}
-{#                            }#}
-{#                        }#}
-{#                    },#}
-{#                    calculable: true,#}
-{#                    xAxis: [{#}
-{#                        type: 'category',#}
-{#                        name: 'clcok',#}
-{#                        boundaryGap: true,#}
-{#                        axisLabel: {#}
-{#                            formatter: '{value}'#}
-{#                        },#}
-{#                        data:[]#}
-{#                    }],#}
-{#                    yAxis: [{#}
-{#                        type: 'value',#}
-{#                        min:0,#}
-{#                        max:1,#}
-{#                        axisLabel: {#}
-{#                            formatter: '{value}'#}
-{#                        }#}
-{#                    }]#}
-{#                };#}
-{##}
-{##}
-{#                // 为echarts对象加载数据 #}
-{#                myChart.setOption(option);#}
                 refresh();
             }
         );
