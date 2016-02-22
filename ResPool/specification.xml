@@ -1,0 +1,27 @@
+
+<context>
+	<feature>
+		<name>The name of the feature.</name>
+		<default_value>The default_value of the feature</default_value>
+		<update>
+			<update_rule>The discription of the update operation.</update_rule>
+			<update_cycle>The cycle of update</update_cycle>
+		</update>
+	</feature>
+	
+	<feature>...</feature>
+		.
+		.
+		.
+</context>
+
+<context>
+	<feature>
+		<name>"Wifi"</name>
+		<default_value>"Strong"</default_value>
+		<update>
+			<update_rule>lambda: ["strong", "weak"][randint(0, 1)]</update_rule>
+			<update_cycle>1</update_cycle>
+		</update>
+	</feature>
+</context>

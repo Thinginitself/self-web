@@ -1,0 +1,649 @@
+<res_list>
+    <res name="outside.temperature">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                3
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">0</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="temperature">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="time">
+        <model>
+            <format>string</format>
+            <initial>"daytime"</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>2</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">["daytime","night"]</parameter>
+                    <parameter name="init_state">"daytime"</parameter>
+                    <parameter name="trans_matrix">[[0,1],[1,0]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="weather">
+        <model>
+            <format>
+                string
+            </format>
+            <initial>
+                "Sunny"
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>4</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">["Sunny","Snowy","Cloudy","Windy","Rainy"]</parameter>
+                    <parameter name="init_state">"Sunny"</parameter>
+                    <parameter name="trans_matrix">[[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="season">
+        <model>
+            <format>string</format>
+            <initial>"Spring"</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>10</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">["Spring","Summer","Autumn","Winter"]</parameter>
+                    <parameter name="init_state">"Spring"</parameter>
+                    <parameter name="trans_matrix">[[0,1,0,0],[0,0,1,0],[0,0,0,1],[1,0,0,0]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="somebodyhome">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">0</parameter>
+                    <parameter name="max">1</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="window">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                0
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>3</next>
+            <rule>
+               null
+            </rule>
+        </update>
+    </res>
+
+    <res name="blind">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                0
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="heater.power">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                0
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="heater.level">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                0
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+
+    <res name="light.power">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+           <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="light.intensity">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="light">
+        <model>
+            <format>
+                dict
+            </format>
+            <initial>
+                null
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$light.power</parameter>
+                    <parameter name="section">$light.intensity</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+<!--    <res name="heater">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                0
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>3</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>-->
+
+    <res name="aircondition.mode">
+        <model>
+            <format>string</format>
+            <initial>"cool"</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>2</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="aircondition.level">
+        <model>
+            <format>number</format>
+            <initial>2</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+        <res name="aircondition.power">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="aircondition">
+        <model>
+            <format>
+                dict
+            </format>
+            <initial>
+                null
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$aircondition.power</parameter>
+                    <parameter name="section">$aircondition.mode</parameter>
+                    <parameter name="section">$aircondition.level</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="computer.power">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="computer.brightness">
+        <model>
+            <format>number</format>
+            <initial>2</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="computer.volume">
+        <model>
+            <format>number</format>
+            <initial>3 </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="computer">
+        <model>
+            <format>dict</format>
+            <initial>null</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$computer.power</parameter>
+                    <parameter name="section">$computer.brightness</parameter>
+                    <parameter name="section">$computer.volume</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="tv.power">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="tv.brightness">
+        <model>
+            <format>number</format>
+            <initial>3</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="tv.volume">
+        <model>
+            <format>number</format>
+            <initial>2</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="tv">
+        <model>
+            <format>dict</format>
+            <initial>null</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$tv.power</parameter>
+                    <parameter name="section">$tv.brightness</parameter>
+                    <parameter name="section">$tv.volume</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="humidity">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">1</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="airquality">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">1</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="env.brightness">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">1</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+    <res name="brightness">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+<!--            <rule>
+                <function name="mean" type="math_expression">
+                    <parameter name="term">$env.brightness</parameter>
+                    <parameter name="term">$computer.brightness</parameter>
+                    <parameter name="term">$tv.brightness</parameter>
+                </function>
+            </rule>-->
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="env.volume">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">1</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="volume">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="mean" type="math_expression">
+                    <parameter name="term">$env.volume</parameter>
+                    <parameter name="term">$computer.volume</parameter>
+                    <parameter name="term">$tv.volume</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="power">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+<!--            <rule>
+                <function name="sum" type="math_expression">
+                    <parameter name="term">$light.power</parameter>
+                    <parameter name="term">$aircondition.power</parameter>
+                    <parameter name="term">$computer.power</parameter>
+                    <parameter name="term">$tv.power</parameter>
+                    <parameter name="term">1</parameter>
+                </function>
+            </rule>-->
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="room:goal_overall">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="room:goal_security">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="room:goal_comfort">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="room:goal_energy">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="room:rule_id">
+        <model>
+            <format>string</format>
+            <initial>null</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>null</rule>
+        </update>
+    </res>
+
+
+
+    <res name="room:goal_visual_comfort">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="room:goal_thermal_comfort">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+</res_list>

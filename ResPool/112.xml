@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<context clock="11">
+  <feature>
+    <name>Internal Memory</name>
+    <currentValue>945</currentValue>
+  </feature>
+  <feature>
+    <name>time</name>
+    <currentValue>night</currentValue>
+  </feature>
+  <feature>
+    <name>location</name>
+    <currentValue>Other Country</currentValue>
+  </feature>
+  <feature>
+    <name>Memory</name>
+    <currentValue>{'SD card': 7950, 'Internal Memory': 950}</currentValue>
+  </feature>
+  <feature>
+    <name>surrounding</name>
+    <currentValue>{'sound': 79, 'wifi': 'weak', 'bluetooth': 'weak'}</currentValue>
+  </feature>
+  <feature>
+    <name>bluetooth</name>
+    <currentValue>not exit</currentValue>
+  </feature>
+  <feature>
+    <name>user event</name>
+    <currentValue>{'waiting': False, 'meeting': False, 'sleeping': False}</currentValue>
+  </feature>
+  <feature>
+    <name>Battery</name>
+    <currentValue>89</currentValue>
+  </feature>
+  <feature>
+    <name>LED</name>
+    <currentValue>off</currentValue>
+  </feature>
+  <feature>
+    <name>wifi</name>
+    <currentValue>weak</currentValue>
+  </feature>
+  <feature>
+    <name>SD card</name>
+    <currentValue>7945</currentValue>
+  </feature>
+  <feature>
+    <name>sound</name>
+    <currentValue>76</currentValue>
+  </feature>
+</context>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<content clock="12">
+  <feature>
+    <name>humidity</name>
+    <currentValue>0.442412184144</currentValue>
+  </feature>
+  <feature>
+    <name>temperature</name>
+    <currentValue>23</currentValue>
+  </feature>
+  <feature>
+    <name>sensor</name>
+    <currentValue>{'temperature': 20, 'humidity': 0.5}</currentValue>
+  </feature>
+</content>

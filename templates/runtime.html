@@ -1,0 +1,267 @@
+{% extends 'base.html' %} {% block title %}runtime{% endblock %} {% block content %}
+
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">运行页面</strong> / <small>runtime</small></div>
+    </div>
+    <div class="am-g am-margin am-padding">
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main" style="height:400px"></div>
+        <!-- ECharts单文件引入 -->
+        <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+        <script type="text/javascript">
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line'
+            ],
+            function(ec) {
+                // 基于准备好的dom，初始化echarts图表
+                myChart = ec.init(document.getElementById('main'));
+
+{#                var option = {#}
+{#                    title: {#}
+{#                        text: 'Goal Satisfaction Degree',#}
+{#                    },#}
+{#                    tooltip: {#}
+{#                        trigger: 'axis'#}
+{#                    },#}
+{#                    legend: {#}
+{#                        show: true,#}
+{#                        y:'bottom',#}
+{#                        padding: 0,#}
+{#                        data: []#}
+{#                    },#}
+{#                    toolbox: {#}
+{#                        show: true,#}
+{#                        feature: {#}
+{#                            mark: {#}
+{#                                show: true#}
+{#                            },#}
+{#                            dataView: {#}
+{#                                show: true,#}
+{#                                readOnly: false#}
+{#                            },#}
+{#                            magicType: {#}
+{#                                show: true,#}
+{#                                type: ['line', 'bar']#}
+{#                            },#}
+{#                            restore: {#}
+{#                                show: true#}
+{#                            },#}
+{#                            saveAsImage: {#}
+{#                                show: true#}
+{#                            }#}
+{#                        }#}
+{#                    },#}
+{#                    calculable: true,#}
+{#                    xAxis: [{#}
+{#                        type: 'category',#}
+{#                        name: 'clcok',#}
+{#                        boundaryGap: true,#}
+{#                        axisLabel: {#}
+{#                            formatter: '{value}'#}
+{#                        },#}
+{#                        data:[]#}
+{#                    }],#}
+{#                    yAxis: [{#}
+{#                        type: 'value',#}
+{#                        min:0,#}
+{#                        max:1,#}
+{#                        axisLabel: {#}
+{#                            formatter: '{value}'#}
+{#                        }#}
+{#                    }]#}
+{#                };#}
+{##}
+{##}
+{#                // 为echarts对象加载数据 #}
+{#                myChart.setOption(option);#}
+                refresh();
+            }
+        );
+        </script>
+    </div>
+{#    <legend class="am-margin">Active Rules</legend>#}
+{#    <div class="am-g">#}
+{#        <div class="am-u-sm-12">#}
+{#            <table class="am-table am-table-bd am-table-striped admin-content-table">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>ID</th>#}
+{#                        <th>Name</th>#}
+{#                        <th>Description</th>#}
+{#                        <th>Settings</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                    <tr>#}
+{#                        <td>1</td>#}
+{#                        <td>John Clark</td>#}
+{#                        <td><a href="#">Business management</a></td>#}
+{#                        <td>#}
+{#                            <div class="am-dropdown" data-am-dropdown>#}
+{#                                <button class="am-btn am-btn-default am-btn-xs am-dropdown-toggle" data-am-dropdown-toggle><span class="am-icon-cog"></span> <span class="am-icon-caret-down"></span></button>#}
+{#                                <ul class="am-dropdown-content">#}
+{#                                    <li><a href="#">1. 编辑</a></li>#}
+{#                                    <li><a href="#">2. 下载</a></li>#}
+{#                                    <li><a href="#">3. 删除</a></li>#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>2</td>#}
+{#                        <td>Chsange</td>#}
+{#                        <td><a href="#">define dasdasda</a> </td>#}
+{#                        <td>#}
+{#                            <div class="am-dropdown" data-am-dropdown>#}
+{#                                <button class="am-btn am-btn-default am-btn-xs am-dropdown-toggle" data-am-dropdown-toggle><span class="am-icon-cog"></span> <span class="am-icon-caret-down"></span></button>#}
+{#                                <ul class="am-dropdown-content">#}
+{#                                    <li><a href="#">1. 编辑</a></li>#}
+{#                                    <li><a href="#">2. 下载</a></li>#}
+{#                                    <li><a href="#">3. 删除</a></li>#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="am-g">#}
+{#        <div class="am-u-md-6">#}
+{#            <div class="am-panel am-panel-default">#}
+{#                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}">User Preference<span class="am-icon-chevron-down am-fr"></span></div>#}
+{#                <div id="collapse-panel-2" class="am-in">#}
+{#                    <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">#}
+{#                        <tbody>#}
+{#                            <tr>#}
+{#                                <th>Goal</th>#}
+{#                                <th>Weight</th>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td>energe saving</td>#}
+{#                                <td>0.25</td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td>effective control</td>#}
+{#                                <td>0.25</td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td>visual comfort</td>#}
+{#                                <td>0.25</td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td>scalability</td>#}
+{#                                <td>0.25</td>#}
+{#                            </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                    <form class="am-form">#}
+{#                        <fieldset>#}
+{#                            <div class="am-form-group">#}
+{#                                <label for="doc-select-1">Goal Satisfaction Degree</label>#}
+{#                                <select id="doc-select-1">#}
+{#                                    <option value="option1">goal overall</option>#}
+{#                                    <option value="option2">选项二.....</option>#}
+{#                                    <option value="option3">选项三........</option>#}
+{#                                </select>#}
+{#                                <span class="am-form-caret"></span>#}
+{#                            </div>#}
+{#                            <p>#}
+{#                                <button type="submit" class="am-btn am-btn-primary">Show Gragh</button>#}
+{#                            </p>#}
+{#                        </fieldset>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-3'}">something<span class="am-icon-chevron-down am-fr"></span></div>
+                <div class="am-panel-bd">
+                     <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>average</th>
+                                <th>variance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="property">
+                            
+                        </tbody>
+                     </table>
+                                  
+                </div>
+
+            </div>
+        </div>
+    </div>
+        <div class="am-g">
+
+        <div class="am-u-md-6">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-3'}">System Control<span class="am-icon-chevron-down am-fr"></span></div>
+                <div class="am-panel-bd">
+
+                    <div class="am-form-group">
+                        <label for="doc-ipt-email-1" >Clock</label>
+                        <input type="number" class="" id="clock" value="0">
+                    </div>
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-1">Step</label>
+                        <input type="number" class="" id="input_tick_interval" value="10000">
+                    </div>
+                    <button type="submit" class="am-btn am-btn-primary" onclick="update_tick_interval()">Submit</button>
+
+                    <p class=""></p>
+                    <div>
+                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="client_start()">Start Clock</button>
+{#                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="client_restart()">Restart Clock</button>#}
+                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="client_stop()">Stop Clock</button>
+                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="ticktock_to_next_update()" >Tick</button>
+                    </div>
+                    <!--<p class=""></p>-->
+                    <!--<div>-->
+                        <!--<button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="ticktock_to_next_update()" >Tick</button>-->
+                        <!--<button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="tick(1)" >Tick</button>-->
+                        <!--<button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="ticktock_to_next_update()" >Tiiiiiick</button>-->
+                    <!--</div>-->
+{#                    <p class=""></p>#}
+{#                    <div>#}
+{#                        <button type="submit" class="am-btn am-btn-default am-btn-sm">Start Respool</button>#}
+{#                        <button type="submit" class="am-btn am-btn-default am-btn-sm">Reset Respool</button>#}
+{#                        <button type="submit" class="am-btn am-btn-default am-btn-sm">Init Respool</button>#}
+{#                        <button type="submit" class="am-btn am-btn-default am-btn-sm">Start Agent</button>#}
+{#                    </div>#}
+                </div>
+            </div>
+        </div>
+        <div class="am-u-md-6">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}">Active Rules<span class="am-icon-chevron-down am-fr"></span></div>
+                <div id="collapse-panel-2" class="am-in">
+                    <!--<p id="active_rules"></p>-->
+                    <textarea id="active_rules" rows="10" style="width: 100%;overflow-y: visible"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="am-u-md-6">-->
+        <!--<label for="goal_aver">Average</label>-->
+	    <!--<textarea id="goal_aver" rows="1"></textarea>-->
+        <!--<label for="goal_std">StdDeviation</label>-->
+        <!--<textarea id="goal_std" rows="1"></textarea>-->
+    <!--</div>-->
+<!-- content end -->
+{% endblock %}

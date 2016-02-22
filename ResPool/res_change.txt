@@ -1,0 +1,23 @@
+time 
+    strftime('%H%M%S')
+sound
+    ÕýÌ¬·Ö²¼(1,100) random.normalvariate(0,100)
+location
+    {other_country£º[0.2,0.5,0.3],register_province:[0.2,0.5,0.3],other_province:[0.2,0.5,0.3]} cycle=randint(1,10)
+Wifi
+    {strong:[0.5,0.5],weak:[0.5,0.5]}    cycle = randint(1,10)
+BT
+    {exit:[0.3,0.7],not_exit:[0.7,0.3]}    cycle = randint(1,10)
+User_event
+    {meeting:[0.6,0.15,0,0.25,0],waiting:[0.1,0.55,0.1,0.2,0.05],sleeping:[0.1,0.1,0.8,0,0],
+	 meeting_waiting:[0.3,0.3,0.1,0.3,0],sleeeping_waiting[0.2,0.25,0.25,0,0.3]}    cycle = randint(1,10)
+Internal_memory
+    changed by software action
+SD_card
+    changed by software action
+LED
+    {on:[0.7,0.3],off:[0.3,0.7]}  cycle=(1,10)
+battery
+    100-t%101
+
+{pre}action{post} 
