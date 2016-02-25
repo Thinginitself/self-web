@@ -60,18 +60,20 @@ function refresh() {
             names.push(data[i].name)
         }
 
-        averages = []
-        variances = []
+        averages = [];
+        variances = [];
 
         for (i=0; i < data.length; i++) {
             avg = 0;
             total = data[i].data;
-            for (j=0;j<total.length;j++){
+            for (j=0;j<total.length;j++) {
                 avg += total[j];
             }
-            avg /= total.length;
+            if (total.length != 0) {
+                    avg /= total.length;
+            }
             vrc = 0;
-            for (j=0;j<total.length;j++){
+            for (j=0;j<total.length;j++) {
                 vrc += (total[j]-avg)*(total[j]-avg);
             }
 

@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block title %}environment_list{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">详情列表</strong> / <small>list</small></div>
+</div>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf">
+        环境名称：智能家居
+        <br>
+        资源总数：19
+    </div>
+</div>
+<div class="am-tabs am-margin" data-am-tabs>
+    <ul class="am-tabs-nav am-nav am-nav-tabs">
+        <li class="am-active"><a href="#tab1">资源列表</a></li>
+        <li><a href="#tab2">软件列表</a></li>
+        <li><a href="#tab3">目标列表</a></li>
+    </ul>
+    <div class="am-tabs-bd">
+        <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>初值</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res_name, res_format, res_initial in resources %}
+                    <tr>
+                        <th>{{ res_name }}</th>
+                        <td>{{ res_format }}</td>
+                        <td>{{ res_initial }}</td>
+                        <th>
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="am-margin ">
+                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_custom'">新建资源</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

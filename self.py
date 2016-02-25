@@ -5,12 +5,13 @@
 """
 
 import os
-from sqlite3 import dbapi2 as sqlite3
+import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from werkzeug import secure_filename
 from ResPool import client, res_manager
 import json
+from contextlib import closing
 
 
 # create our little application :)
@@ -20,10 +21,68 @@ ALLOWED_EXTENSIONS = set(['txt', 'xml'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['DATABASE'] = "./self.db"
+
+
 
 res_list = []
 goal_list = []
 res_rule_id = 0
+
+def connect_db():
+    return sqlite3.connect(app.config['DATABASE'])
+
+def init_db():
+    with closing(connect_db()) as db:
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+
+def get_db():   
+    if not hasattr(g, 'db'):
+        g.db = connect_db()
+    return g.db
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+@app.teardown_request
+def teardown_request(exception):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
+    g.db.close()
+
+@app.route('/environment_main')
+def view_environment_main():
+    cur = g.db.execute('select name, format from entries order by id desc')
+    entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
+    return render_template('environment_main.html', entries=entries)
+
+@app.route('/environment_list')
+def view_environment_list():
+    cur = g.db.execute('select name, format, initial from entries order by id desc')
+    setting_res = [row for row in cur.fetchall()]
+
+    return render_template('environment_list.html', resources=setting_res)
+
+@app.route('/add_res', methods=['POST'])
+def op_add_res(): 
+    res_name = request.form.get("res_name")
+    res_format = request.form.get("res_format")
+    res_initial = request.form.get("res_initial")
+    res_delay = request.form.get("res_delay")
+    res_next = request.form.get("res_next")
+    res_rule = request.form.get("res_rule")
+    g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',
+                 ["home", res_name, res_format, res_initial, res_delay, res_next, res_rule])
+    g.db.commit()
+    return redirect(url_for('view_environment_list'))
+
+@app.route('/environment_custom')
+def view_environment_custom():
+    return render_template('environment_custom.html')
 
 @app.route('/')
 @app.route('/runtime')
@@ -85,6 +144,7 @@ def op_get_goal_values():
     return json.dumps(ret)
 
 if __name__ == '__main__':
+    init_db()
     client.reset_res_pool()
     res_list = client.add_res_from_file("./static/reslist_view.xml")
     goal_list = filter(lambda x : 'goal' in x, res_list)
