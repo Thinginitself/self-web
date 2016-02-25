@@ -62,7 +62,7 @@ def view_environment_main():
     for j in environments:
         i = j[0]
         print i
-        num = g.db.execute('select count(*) from entries where environment = (?)', i).fetchall()[0][0]
+        num = g.db.execute('select count(*) from entries where environment = (?)', [i]).fetchall()[0][0]
         entries.append([i,num])
     return render_template('environment_main.html', entries=entries)
 
@@ -103,22 +103,43 @@ def view_environment_custom():
     return render_template('environment_custom.html',pre_res_name=res_name,pre_res_environment=res_environment)
 
 
+@app.route('/runtime_choose')
+def view_choose():
+    cur = g.db.execute('select distinct environment from entries')
+    environments = [row for row in cur.fetchall()]
+    entries = []
+    for j in environments:
+        i = j[0]
+        print i
+        num = g.db.execute('select count(*) from entries where environment = (?)', [i]).fetchall()[0][0]
+        entries.append([i,num])
+    return render_template('runtime_choose.html', entries=entries)
+
+@app.route('/set_environment', methods=['POST'])
+def op_set_environment():
+    environment_name = request.form.get("environment_name",'default')
+    cur = g.db.execute('select name, format, initial, delay, next, rule from entries where environment = (?) order by id desc', [environment_name])
+    setting_res = [row for row in cur.fetchall()]
+    for n, f, i, d, n, r in setting_res:
+        model = {"format":f, "initial":i}
+        update = {"delay":d, "next":n, "rule":r}
+        client.add_res(n,model,update)
+
+
+
+
 @app.route('/')
 @app.route('/runtime_main')
 def view_runtime():
     return render_template('runtime.html')
 
-@app.route('/runtime_detial')
+@app.route('/runtime_detail')
 def view_list():
     res_vals = client.get_all_res_value(res_list, -1)
     print res_vals
     return render_template('list.html',
                            resources=res_vals,
                            clock=client.get_clock())
-
-@app.route('/customization')
-def view_customization():
-    return render_template('customization.html')
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -173,4 +194,4 @@ if __name__ == '__main__':
     print "res_list=",res_list
     print "goal_list=",goal_list
     with app.app_context():
-        app.run(port=5000)
+        app.run(port=5000,threaded=True)

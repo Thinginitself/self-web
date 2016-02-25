@@ -23,13 +23,23 @@ function add_res() {
     $.post("/add_res", new_res_data, jump_list(res_environment.innerText));
 }
 
-function del_res(del_res_name) {
+function del_res(del_res_name, environment_name) {
     var del_res_data = {
         "del_res_name": del_res_name
     };
-    $.post("/del_res", del_res_data, jump_list(res_environment.innerText));
+    $.post("/del_res", del_res_data, jump_list(environment_name));
 }
 
 function custom_res(res_name, res_environment) {
     location = 'environment_custom?res_name='+res_name+'&res_environment='+res_environment;
+}
+
+function load_environment(){
+	checklist = document.getElementsByClassName("check");
+	for (var i = checklist.length - 1; i >= 0; i--) {
+		if (checklist[i].checked == true) {
+			$.post('/set_environment',{"environment_name":checklist[i].for})
+		}
+	}
+	location = 'runtime_main';
 }
