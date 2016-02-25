@@ -4,9 +4,7 @@
 </div>
 <div class="am-cf am-padding">
     <div class="am-fl am-cf">
-        环境名称：智能家居
-        <br>
-        资源总数：19
+        环境名称：{{ environment_name }}
     </div>
 </div>
 <div class="am-tabs am-margin" data-am-tabs>
@@ -35,8 +33,8 @@
                         <th>
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
                                 </div>
                             </div>
                         </th>
@@ -45,7 +43,7 @@
                 </tbody>
             </table>
             <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_custom'">新建资源</button>
+                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_res('default','{{ environment_name }}')">新建资源</button>
             </div>
         </div>
     </div>

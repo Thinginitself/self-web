@@ -1,34 +1,36 @@
 {% extends 'base.html' %} {% block title %}environment_main{% endblock %} {% block content %}
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">环境资源</strong> / <small>environment</small></div>
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">定制环境</strong> / <small>environment</small></div>
 </div>
 <table class="am-table am-table-striped am-table-hover am-padding">
     <thead>
         <tr>
-            <th>编号</th>
-            <th>名称</th>
+            <th>环境名称</th>
             <th>资源数</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
+
+        {% for name,num in entries %}
         <tr>
-            <td>1</td>
-            <td>智能家居</td>
-            <td>19</td>
+            <td>{{ name }}</td>
+            <td>{{ num }}</td>
             <td>
                 <div class="am-btn-toolbar">
                     <div class="am-btn-group am-btn-group-xs">
-                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="jump_list('{{ name }}')"><span class="am-icon-pencil-square-o" ></span> 编辑</button>
                         <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
                     </div>
                 </div>
             </td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
 
 <div class="am-margin ">
-    <button type="button" class="am-btn am-btn-primary am-btn-xs">新建环境</button>
+    <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_list?environment_name='+input_environment_name.value">新建环境</button>
+    <input type="text" class="am-input-sm" id="input_environment_name">
 </div>
 {% endblock %}

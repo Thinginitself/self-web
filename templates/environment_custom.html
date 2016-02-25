@@ -5,12 +5,23 @@
 <div class="am-panel am-panel-default am-margin">
     <div class="am-panel-bd am-in">
         <form class="am-form" method="post" action="{{ url_for('op_add_res') }}" id="res_form">
+            
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-8 am-u-md-4 am-text-right">
+                <strong>environment: <div id="res_environment">{{ pre_res_environment }}</div></strong>
+                </div>
+            </div>
             <div class="am-g am-margin-top">
                 <div class="am-u-sm-4 am-u-md-2 am-text-right">
                     name
                 </div>
                 <div class="am-u-sm-8 am-u-md-4">
+
+                    {% if pre_res_name != 'default'%}
+                    <input type="text" class="am-input-sm" id="input_res_name" value="{{ pre_res_name }}" disabled>
+                    {% else %}
                     <input type="text" class="am-input-sm" id="input_res_name">
+                    {% endif %}
                 </div>
                 <div class="am-hide-sm-only am-u-md-6">*必填，不可重复</div>
             </div>
@@ -59,6 +70,6 @@
 </div>
 <div class=" am-margin">
     <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="add_res()">提交保存</button>
-    <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_list'">放弃保存</button>
+    <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="jump_list(res_environment.innerText)">放弃保存</button>
 </div>
 {% endblock %}

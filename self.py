@@ -56,19 +56,27 @@ def teardown_request(exception):
 
 @app.route('/environment_main')
 def view_environment_main():
-    cur = g.db.execute('select name, format from entries order by id desc')
-    entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('select distinct environment from entries')
+    environments = [row for row in cur.fetchall()]
+    entries = []
+    for j in environments:
+        i = j[0]
+        print i
+        num = g.db.execute('select count(*) from entries where environment = (?)', i).fetchall()[0][0]
+        entries.append([i,num])
     return render_template('environment_main.html', entries=entries)
 
 @app.route('/environment_list')
 def view_environment_list():
-    cur = g.db.execute('select name, format, initial from entries order by id desc')
+    environment_name = request.args.get("environment_name",'default')
+    cur = g.db.execute('select name, format, initial from entries where environment = (?) order by id desc', [environment_name])
     setting_res = [row for row in cur.fetchall()]
 
-    return render_template('environment_list.html', resources=setting_res)
+    return render_template('environment_list.html', resources=setting_res, environment_name=environment_name)
 
 @app.route('/add_res', methods=['POST'])
 def op_add_res(): 
+    res_environment = request.form.get("res_environment")
     res_name = request.form.get("res_name")
     res_format = request.form.get("res_format")
     res_initial = request.form.get("res_initial")
@@ -76,20 +84,31 @@ def op_add_res():
     res_next = request.form.get("res_next")
     res_rule = request.form.get("res_rule")
     g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',
-                 ["home", res_name, res_format, res_initial, res_delay, res_next, res_rule])
+                 [res_environment, res_name, res_format, res_initial, res_delay, res_next, res_rule])
     g.db.commit()
     return redirect(url_for('view_environment_list'))
 
-@app.route('/environment_custom')
+@app.route('/del_res', methods=['POST'])
+def op_del_res():
+    del_res_name = request.form.get("del_res_name")
+    print del_res_name
+    g.db.execute("delete from entries where name = (?)", [del_res_name])
+    g.db.commit()
+    return redirect(url_for('view_environment_list'))
+
+@app.route('/environment_custom',methods=['POST', 'GET'])
 def view_environment_custom():
-    return render_template('environment_custom.html')
+    res_name = request.args.get("res_name","default")
+    res_environment = request.args.get("res_environment","home")
+    return render_template('environment_custom.html',pre_res_name=res_name,pre_res_environment=res_environment)
+
 
 @app.route('/')
-@app.route('/runtime')
+@app.route('/runtime_main')
 def view_runtime():
     return render_template('runtime.html')
 
-@app.route('/list')
+@app.route('/runtime_detial')
 def view_list():
     res_vals = client.get_all_res_value(res_list, -1)
     print res_vals
