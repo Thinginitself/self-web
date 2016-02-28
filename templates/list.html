@@ -18,32 +18,15 @@
             <table class="am-table am-table-striped am-table-hover table-main">
                 <thead>
                     <tr>
-                        <th class="table-check">
-                            <input type="checkbox" />
-                        </th>
-
                         <th class="table-title">名称</th>
                         <th class="table-type">取值</th>
-                        <th class="table-set">操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for name,value in resources.iteritems() %}
                         <tr>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
                             <td><a href="#">{{ name }}</a></td>
-                            <td class="am-hide-sm-only">{{ value }}</td>
-                            <td>
-                                <div class="am-btn-toolbar">
-                                    <div class="am-btn-group am-btn-group-xs">
-                                        <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                        <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
-                                        <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
-                                    </div>
-                                </div>
-                            </td>
+                            <td>{{ value }}</td>
                         </tr>
                     {% endfor %}
 {#                    <tr>#}

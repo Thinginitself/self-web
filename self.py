@@ -9,7 +9,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from werkzeug import secure_filename
-from ResPool import client, res_manager
+from ResPool import client, res_manager, utils
 import json
 from contextlib import closing
 
@@ -118,13 +118,29 @@ def view_choose():
 @app.route('/set_environment', methods=['POST'])
 def op_set_environment():
     environment_name = request.form.get("environment_name",'default')
+    print environment_name,"============================="
     cur = g.db.execute('select name, format, initial, delay, next, rule from entries where environment = (?) order by id desc', [environment_name])
     setting_res = [row for row in cur.fetchall()]
     for n, f, i, d, n, r in setting_res:
         model = {"format":f, "initial":i}
         update = {"delay":d, "next":n, "rule":r}
         client.add_res(n,model,update)
+    return redirect(url_for('view_runtime'))
 
+@app.route('/add_setting_from_file',methods=['POST'])
+def op_add_setting_from_file():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        with open(filepath, "r") as fin:
+            context = fin.read()
+            data = utils.get_data_from_xml_context(context)
+        for res in data["res_list"]['res']:
+            g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], str(res["update"]["rule"])])
+            g.db.commit()
+    return redirect(url_for('view_environment_main'))
 
 
 
