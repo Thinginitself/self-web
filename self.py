@@ -134,7 +134,7 @@ def op_set_environment():
     for res in res_list:
         if 'rule_id' in res:
             res_rule_id = res
-    return redirect(url_for('view_list'))
+    return redirect(url_for('view_agent_choose'))
 
 @app.route('/add_setting_from_file',methods=['POST'])
 def op_add_setting_from_file():
@@ -150,6 +150,13 @@ def op_add_setting_from_file():
             g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], json.JSONEncoder().encode(res["update"]["rule"])])
             g.db.commit()
     return redirect(url_for('view_environment_main'))
+
+
+@app.route('/agent_choose', methods=['POST', 'GET'])
+def view_agent_choose():
+    if request.method == 'POST':
+        return redirect(url_for('view_runtime'))
+    return render_template('agent_choose.html')
 
 
 

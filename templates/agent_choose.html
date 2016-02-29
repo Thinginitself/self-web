@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block title %}agent_choose{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">agent选择</strong> / <small>agent_choose</small></div>
+</div>
+<div class="am-margin">
+    <form method="post" action="/agent_choose" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+        <div class="am-form-group am-form-file">
+            <button type="button" class="am-btn am-btn-default am-btn-xs">
+                <i class="am-icon-cloud-upload"></i> 点击选择agent设定文件</button>
+            <input type="file" name="agent" id="agent" value="选择" onSelect="this.fileform.submit();"  class="am-form-field" required/>
+        </div>
+        <div id="file-list"></div>
+        <script>
+        $(function() {
+            $('#agent').on('change', function() {
+                var fileNames = '';
+                $.each(this.files, function() {
+                    fileNames += '<p>' + this.name + '</p> ';
+                });
+                $('#file-list').html(fileNames);
+            });
+        });
+        </script>
+        <div class="am-cf ">
+            <input type="submit" name="submit" value="上传agent" class="am-btn am-btn-secondary am-btn-xs " />
+        </div>
+    </form>
+</div>
+{% endblock %}
