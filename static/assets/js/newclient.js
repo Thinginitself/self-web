@@ -38,7 +38,7 @@ function load_environment(){
 	checklist = document.getElementsByClassName("check");
 	for (var i = checklist.length - 1; i >= 0; i--) {
 		if (checklist[i].checked == true) {
-			$.post('/set_environment',{"environment_name":checklist[i].for})
+			$.post('/set_environment',{"environment_name":checklist[i].attributes["for"].nodeValue});
 		}
 	}
 	location = 'runtime_main';

@@ -54,6 +54,7 @@ def teardown_request(exception):
         db.close()
     g.db.close()
 
+@app.route('/')
 @app.route('/environment_main')
 def view_environment_main():
     cur = g.db.execute('select distinct environment from entries')
@@ -118,13 +119,15 @@ def view_choose():
 @app.route('/set_environment', methods=['POST'])
 def op_set_environment():
     environment_name = request.form.get("environment_name",'default')
-    print environment_name,"============================="
     cur = g.db.execute('select name, format, initial, delay, next, rule from entries where environment = (?) order by id desc', [environment_name])
     setting_res = [row for row in cur.fetchall()]
-    for n, f, i, d, n, r in setting_res:
+    for n, f, i, d, ni, r in setting_res:
+        if r!="null":
+            r = eval(r)
         model = {"format":f, "initial":i}
-        update = {"delay":d, "next":n, "rule":r}
-        client.add_res(n,model,update)
+        update = {"delay":d, "next":ni, "rule":r}
+        print n,model,update
+        #client.add_res(n,model,update)
     return redirect(url_for('view_runtime'))
 
 @app.route('/add_setting_from_file',methods=['POST'])
@@ -144,7 +147,6 @@ def op_add_setting_from_file():
 
 
 
-@app.route('/')
 @app.route('/runtime_main')
 def view_runtime():
     return render_template('runtime.html')
