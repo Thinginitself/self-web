@@ -1,11 +1,11 @@
-{% extends 'base.html' %} {% block title %}environment_main{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %}setting_main{% endblock %} {% block content %}
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">定制环境</strong> / <small>environment</small></div>
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">定制配置</strong> / <small>setting_main</small></div>
 </div>
 <table class="am-table am-table-striped am-table-hover am-padding">
     <thead>
         <tr>
-            <th>环境名称</th>
+            <th>配置名称</th>
             <th>资源数</th>
             <th>操作</th>
         </tr>
@@ -28,7 +28,7 @@
     </tbody>
 </table>
 <div class="am-margin ">
-    <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_list?environment_name='+input_environment_name.value">新建环境</button>
+    <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="location='environment_list?environment_name='+input_environment_name.value">新建配置</button>
     <input type="text" class="am-input-sm" id="input_environment_name">
 </div>
 <div class="am-margin">
