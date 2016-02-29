@@ -41,5 +41,5 @@ function load_environment(){
 			$.post('/set_environment',{"environment_name":checklist[i].attributes["for"].nodeValue});
 		}
 	}
-	location = 'runtime_main';
+	location = 'runtime_detail';
 }

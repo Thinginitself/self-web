@@ -118,17 +118,23 @@ def view_choose():
 
 @app.route('/set_environment', methods=['POST'])
 def op_set_environment():
+    global res_list,goal_list,res_rule_id
     environment_name = request.form.get("environment_name",'default')
     cur = g.db.execute('select name, format, initial, delay, next, rule from entries where environment = (?) order by id desc', [environment_name])
     setting_res = [row for row in cur.fetchall()]
     for n, f, i, d, ni, r in setting_res:
-        if r!="null":
-            r = eval(r)
+        i = json.loads(i)
         model = {"format":f, "initial":i}
-        update = {"delay":d, "next":ni, "rule":r}
-        print n,model,update
-        #client.add_res(n,model,update)
-    return redirect(url_for('view_runtime'))
+        update = {"delay":d, "next":ni, "rule":json.JSONDecoder().decode(r)}
+        print "===========",n,model,update
+        client.add_res(n,model,{'Default': utils.warp_update(update)})
+        res_list.append(n)
+
+    goal_list = filter(lambda x : 'goal' in x, res_list)
+    for res in res_list:
+        if 'rule_id' in res:
+            res_rule_id = res
+    return redirect(url_for('view_list'))
 
 @app.route('/add_setting_from_file',methods=['POST'])
 def op_add_setting_from_file():
@@ -141,7 +147,7 @@ def op_add_setting_from_file():
             context = fin.read()
             data = utils.get_data_from_xml_context(context)
         for res in data["res_list"]['res']:
-            g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], str(res["update"]["rule"])])
+            g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], json.JSONEncoder().encode(res["update"]["rule"])])
             g.db.commit()
     return redirect(url_for('view_environment_main'))
 
@@ -162,21 +168,6 @@ def view_list():
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-@app.route('/import', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            client.reset_res_pool()
-            global res_list,goal_list
-            res_list = client.add_res_from_file(filepath)
-            goal_list = filter(lambda x : 'goal' in x, res_list)
-            return render_template('runtime.html')
-    return render_template('import.html')
 
 @app.route('/tick',methods=['GET', 'POST'])
 def op_tick():
@@ -204,12 +195,12 @@ def op_get_goal_values():
 if __name__ == '__main__':
     init_db()
     client.reset_res_pool()
+    '''
     res_list = client.add_res_from_file("./static/reslist_view.xml")
     goal_list = filter(lambda x : 'goal' in x, res_list)
     for res in res_list:
         if 'rule_id' in res:
             res_rule_id = res
-    print "res_list=",res_list
-    print "goal_list=",goal_list
+    '''
     with app.app_context():
         app.run(port=5000,threaded=True)

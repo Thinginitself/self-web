@@ -132,7 +132,7 @@ def warp_update_value(func):
 def warp_update(update):
     ret = dict()
     ret["delay"] = int(update["delay"])
-    ret["next"] = warp_update_value(update["next"])
+    ret["next"] = int(update["next"])
     ret["rule"] = warp_update_value(update["rule"])
     return ret
 
