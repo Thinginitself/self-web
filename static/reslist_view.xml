@@ -565,7 +565,6 @@
             </rule>
         </update>
     </res>
-    <!--
     <res name="room:goal_security">
         <model>
             <format>number</format>
@@ -592,7 +591,6 @@
             </rule>
         </update>
     </res>
-    -->
     <res name="room:goal_energy">
         <model>
             <format>number</format>
@@ -618,7 +616,7 @@
             <rule>null</rule>
         </update>
     </res>
-<!--
+
     <res name="room:goal_effective_control">
         <model>
             <format>number</format>
@@ -632,7 +630,7 @@
             </rule>
         </update>
     </res>
--->
+
     <res name="room:goal_visual_comfort">
         <model>
             <format>number</format>

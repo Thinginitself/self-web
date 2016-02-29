@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block title %}runtime_choose{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">配置选择</strong> / <small>choose</small></div>
+</div>
+<table class="am-table am-table-striped am-table-hover am-padding">
+    <thead>
+        <tr>
+            <th>环境名称</th>
+            <th>资源数</th>
+            <th>选择</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for name,num in entries %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ num }}</td>
+            <td>
+            	<input type="checkbox" class="check" for="{{ name }}">
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="am-margin ">
+    <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="load_environment()">载入环境</button>
+</div>
+{% endblock %}

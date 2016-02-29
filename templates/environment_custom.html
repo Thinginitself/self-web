@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% block title %}environment_custom{% endblock %} {% block content %}
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">资源定制</strong> / <small>custom</small></div>
+</div>
+<div class="am-panel am-panel-default am-margin">
+    <div class="am-panel-bd am-in">
+        <form class="am-form" method="post" action="{{ url_for('op_add_res') }}" id="res_form">
+            
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-8 am-u-md-4 am-text-right">
+                <strong>environment: <div id="res_environment">{{ pre_res_environment }}</div></strong>
+                </div>
+            </div>
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    name
+                </div>
+                <div class="am-u-sm-8 am-u-md-4">
+
+                    {% if pre_res_name != 'default'%}
+                    <input type="text" class="am-input-sm" id="input_res_name" value="{{ pre_res_name }}" disabled>
+                    {% else %}
+                    <input type="text" class="am-input-sm" id="input_res_name">
+                    {% endif %}
+                </div>
+                <div class="am-hide-sm-only am-u-md-6">*必填，不可重复</div>
+            </div>
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    format
+                </div>
+                <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                    <input type="text" class="am-input-sm" id="input_res_format">
+                </div>
+            </div>
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    initial
+                </div>
+                <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                    <input type="text" class="am-input-sm" id="input_res_initial">
+                </div>
+            </div>
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    delay
+                </div>
+                <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                    <input type="number" class="am-input-sm" id="input_res_delay">
+                </div>
+            </div>
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                    next
+                </div>
+                <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                    <input type="number" class="am-input-sm" id="input_res_next">
+                </div>
+            </div>
+            <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-12 am-u-md-2 am-text-right admin-form-text">
+                    rule
+                </div>
+                <div class="am-u-sm-12 am-u-md-10">
+                    <textarea rows="10" placeholder="请输入规则" id="input_res_rule"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class=" am-margin">
+    <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="add_res()">提交保存</button>
+    <button type="submit" class="am-btn am-btn-primary am-btn-xs" onclick="jump_list(res_environment.innerText)">放弃保存</button>
+</div>
+{% endblock %}
