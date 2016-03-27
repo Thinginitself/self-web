@@ -76,7 +76,7 @@ function refresh() {
             for (j=0;j<total.length;j++) {
                 vrc += (total[j]-avg)*(total[j]-avg);
             }
-
+            vrc /= total.length;
             averages.push(avg.toFixed(4));
             variances.push(vrc.toFixed(4));
 
