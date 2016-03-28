@@ -126,7 +126,7 @@ def view_custom_goal():
 
 @app.route('/custom_software',methods=['POST','GET'])
 def view_custom_software():
-    rres_name = request.args.get("res_name","default")
+    res_name = request.args.get("res_name","default")
     res_environment = request.args.get("res_environment","home")
     return render_template('custom_software.html',pre_res_name=res_name,pre_res_environment=res_environment)
 
