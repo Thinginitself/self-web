@@ -70,7 +70,7 @@ def view_environment_main():
 @app.route('/environment_list')
 def view_environment_list():
     environment_name = request.args.get("environment_name",'default')
-    cur = g.db.execute('select name, format, initial from entries where environment = (?) order by id desc', [environment_name])
+    cur = g.db.execute('select type, name, format, initial from entries where environment = (?) order by id desc', [environment_name])
     setting_res = [row for row in cur.fetchall()]
 
     return render_template('environment_list.html', resources=setting_res, environment_name=environment_name)
@@ -84,8 +84,9 @@ def op_add_res():
     res_delay = request.form.get("res_delay")
     res_next = request.form.get("res_next")
     res_rule = request.form.get("res_rule")
-    g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',
-                 [res_environment, res_name, res_format, res_initial, res_delay, res_next, res_rule])
+    res_type = request.form.get("res_type", "resource")
+    g.db.execute('insert into entries (environment, name, type, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',
+                 [res_environment, res_name, res_type, res_format, res_initial, res_delay, res_next, res_rule])
     g.db.commit()
     return redirect(url_for('view_environment_list'))
 
@@ -102,6 +103,33 @@ def view_environment_custom():
     res_name = request.args.get("res_name","default")
     res_environment = request.args.get("res_environment","home")
     return render_template('environment_custom.html',pre_res_name=res_name,pre_res_environment=res_environment)
+
+@app.route('/custom_res',methods=['POST','GET'])
+def view_custom_res():
+    res_name = request.args.get("res_name","default")
+    res_environment = request.args.get("res_environment","home")
+    return render_template('custom_res.html',pre_res_name=res_name,pre_res_environment=res_environment)
+
+@app.route('/custom_property',methods=['POST','GET'])
+def view_custom_property():
+    res_name = request.args.get("res_name","default")
+    res_environment = request.args.get("res_environment","home")
+    return render_template('custom_property.html',pre_res_name=res_name,pre_res_environment=res_environment)
+
+
+@app.route('/custom_goal',methods=['POST','GET'])
+def view_custom_goal():
+    res_name = request.args.get("res_name","default")
+    res_environment = request.args.get("res_environment","home")
+    return render_template('custom_goal.html',pre_res_name=res_name,pre_res_environment=res_environment)
+
+
+@app.route('/custom_software',methods=['POST','GET'])
+def view_custom_software():
+    rres_name = request.args.get("res_name","default")
+    res_environment = request.args.get("res_environment","home")
+    return render_template('custom_software.html',pre_res_name=res_name,pre_res_environment=res_environment)
+
 
 
 @app.route('/runtime_choose')
@@ -147,7 +175,7 @@ def op_add_setting_from_file():
             context = fin.read()
             data = utils.get_data_from_xml_context(context)
         for res in data["res_list"]['res']:
-            g.db.execute('insert into entries (environment, name, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], json.JSONEncoder().encode(res["update"]["rule"])])
+            g.db.execute('insert into entries (environment, name, type, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], 'resource', res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], json.JSONEncoder().encode(res["update"]["rule"])])
             g.db.commit()
     return redirect(url_for('view_environment_main'))
 

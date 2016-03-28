@@ -13,6 +13,7 @@ function add_res() {
     var new_res_data = {
     	"res_environment": res_environment.innerText,
         "res_name": input_res_name.value,
+        "res_type": "resource",
         "res_format": input_res_format.value,
         "res_initial": input_res_initial.value,
         "res_delay": input_res_delay.value,
@@ -33,7 +34,15 @@ function del_res(del_res_name, environment_name) {
 function custom_res(res_name, res_environment) {
     location = 'environment_custom?res_name='+res_name+'&res_environment='+res_environment;
 }
-
+function custom_property(res_name, res_environment) {
+    location = 'custom_property?res_name='+res_name+'&res_environment='+res_environment;
+}
+function custom_goal(res_name, res_environment) {
+    location = 'custom_goal?res_name='+res_name+'&res_environment='+res_environment;
+}
+function custom_software(res_name, res_environment) {
+    location = 'custom_software?res_name='+res_name+'&res_environment='+res_environment;
+}
 function load_environment(){
 	checklist = document.getElementsByClassName("check");
 	for (var i = checklist.length - 1; i >= 0; i--) {

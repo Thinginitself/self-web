@@ -10,9 +10,9 @@
 <div class="am-tabs am-margin" data-am-tabs>
     <ul class="am-tabs-nav am-nav am-nav-tabs">
         <li class="am-active"><a href="#tab1">资源列表</a></li>
-        <li><a href="#tab2">软件列表</a></li>
+        <li><a href="#tab2">property列表</a></li>
         <li><a href="#tab3">目标列表</a></li>
-        <li><a href="#tab4">property列表</a></li>
+        <li><a href="#tab4">软件列表</a></li>
     </ul>
     <div class="am-tabs-bd">
         <div class="am-tab-panel am-fade am-in am-active" id="tab1">
@@ -26,7 +26,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for res_name, res_format, res_initial in resources %}
+                    {% for res_type, res_name, res_format, res_initial in resources %}
+                    {% if res_type == "resource" %}
                     <tr>
                         <th>{{ res_name }}</th>
                         <td>{{ res_format }}</td>
@@ -40,6 +41,7 @@
                             </div>
                         </th>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -58,7 +60,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for res_name, res_format, res_initial in resources %}
+                    {% for res_type, res_name, res_format, res_initial in resources %}
+                    {% if res_type == "property" %}
                     <tr>
                         <th>{{ res_name }}</th>
                         <td>{{ res_format }}</td>
@@ -66,17 +69,18 @@
                         <th>
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_property('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                     <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
                                 </div>
                             </div>
                         </th>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
             <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_res('default','{{ environment_name }}')">新建资源</button>
+                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_property('default','{{ environment_name }}')">新建property</button>
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab3">
@@ -90,7 +94,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for res_name, res_format, res_initial in resources %}
+                    {% for res_type, res_name, res_format, res_initial in resources %}
                     <tr>
                         <th>{{ res_name }}</th>
                         <td>{{ res_format }}</td>
@@ -98,7 +102,7 @@
                         <th>
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_goal('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                     <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
                                 </div>
                             </div>
@@ -108,7 +112,7 @@
                 </tbody>
             </table>
             <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_res('default','{{ environment_name }}')">新建资源</button>
+                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_goal('default','{{ environment_name }}')">新建目标</button>
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab4">
@@ -122,7 +126,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for res_name, res_format, res_initial in resources %}
+                    {% for res_type, res_name, res_format, res_initial in resources %}
                     <tr>
                         <th>{{ res_name }}</th>
                         <td>{{ res_format }}</td>
@@ -130,7 +134,7 @@
                         <th>
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_software('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                     <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
                                 </div>
                             </div>
@@ -140,7 +144,7 @@
                 </tbody>
             </table>
             <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_res('default','{{ environment_name }}')">新建资源</button>
+                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_software('default','{{ environment_name }}')">新建软件</button>
             </div>
         </div>
     </div>
