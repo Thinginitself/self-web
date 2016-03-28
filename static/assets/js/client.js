@@ -6,8 +6,6 @@ function handle_tick(data) {
     console.info(data);
     refresh();
     clock.value = data.clock;
-    active_rules.textContent = data.rule_id;
-
 }
 
 function tick(number) {
@@ -28,6 +26,12 @@ function client_start() {
     tick_timer = setInterval(function() {
         ticktock_to_next_update();
     }, tick_interval);
+    var stop_b = document.getElementById("stop_clock_botton");
+    var start_b = document.getElementById("start_clock_botton");
+    var submit_b = document.getElementById("submit_botton");
+    submit_b.disabled = "disabled";
+    start_b.disabled = "disabled";
+    stop_b.disabled = "";
 }
 
 function update_tick_interval() {
@@ -35,11 +39,21 @@ function update_tick_interval() {
     if (tick_timer != 0) {
         client_start();
     }
+    var start_b = document.getElementById("start_clock_botton");
+    var submit_b = document.getElementById("submit_botton");
+    submit_b.disabled = "disabled";
+    start_b.disabled = "";
 }
 
 function client_stop() {
     clearInterval(tick_timer);
     tick_timer = 0;
+    var submit_b = document.getElementById("submit_botton");
+    var start_b = document.getElementById("start_clock_botton");
+    var stop_b = document.getElementById("stop_clock_botton");
+    stop_b.disabled = "disabled";
+    start_b.disabled = "";
+    submit_b.disabled = "";
 }
 
 function refresh() {
@@ -147,11 +161,5 @@ function refresh() {
             myChart.hideLoading();
         myChart.setOption(option2);
     })
-
-}
-//自适应高度textarea
-function BodyOnLoad() {
-    var textarea = document.getElementById("active_rules");
-    textarea.style.posHeight = textarea.scrollHeight;
 
 }
