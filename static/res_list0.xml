@@ -5,17 +5,17 @@
                 number
             </format>
             <initial>
-                2
+                3
             </initial>
         </model>
         <update>
             <delay>1</delay>
             <next>1</next>
             <rule>
-                <function name="data_list" type="others">
-                    <parameter name="data_list">[3,4,5,3,2,1]</parameter>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">0</parameter>
+                    <parameter name="max">5</parameter>
                 </function>
-
             </rule>
         </update>
     </res>
@@ -23,10 +23,10 @@
     <res name="temperature">
         <model>
             <format>number</format>
-            <initial>3</initial>
+            <initial>0</initial>
         </model>
         <update>
-            <delay>10000</delay>
+            <delay>1</delay>
             <next>1</next>
             <rule>
                 null
@@ -40,8 +40,8 @@
             <initial>"daytime"</initial>
         </model>
         <update>
-            <delay>3</delay>
-            <next>3</next>
+            <delay>1</delay>
+            <next>2</next>
             <rule>
                 <function name="markov_chain" type="probability">
                     <parameter name="state_set">["daytime","night"]</parameter>
@@ -62,13 +62,13 @@
             </initial>
         </model>
         <update>
-            <delay>6</delay>
-            <next>6</next>
+            <delay>1</delay>
+            <next>4</next>
             <rule>
                 <function name="markov_chain" type="probability">
                     <parameter name="state_set">["Sunny","Snowy","Cloudy","Windy","Rainy"]</parameter>
                     <parameter name="init_state">"Sunny"</parameter>
-                    <parameter name="trans_matrix">[[0,0,1,0,0],[0.2,0.2,0.2,0.2,0.2],[1,0,0,0,0],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2]]</parameter>
+                    <parameter name="trans_matrix">[[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2]]</parameter>
                 </function>
             </rule>
         </update>
@@ -81,7 +81,7 @@
         </model>
         <update>
             <delay>1</delay>
-            <next>720</next>
+            <next>10</next>
             <rule>
                 <function name="markov_chain" type="probability">
                     <parameter name="state_set">["Spring","Summer","Autumn","Winter"]</parameter>
@@ -98,13 +98,12 @@
             <initial>1</initial>
         </model>
         <update>
-            <delay>3</delay>
-            <next>3</next>
+            <delay>1</delay>
+            <next>1</next>
             <rule>
-                <function name="markov_chain" type="probability">
-                    <parameter name="state_set">[1,0]</parameter>
-                    <parameter name="init_state">1</parameter>
-                    <parameter name="trans_matrix">[[0,1],[1,0]]</parameter>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">0</parameter>
+                    <parameter name="max">1</parameter>
                 </function>
             </rule>
         </update>
@@ -479,7 +478,7 @@
             <initial>1</initial>
         </model>
         <update>
-            <delay>10000</delay>
+            <delay>1</delay>
             <next>1</next>
 <!--            <rule>
                 <function name="mean" type="math_expression">
@@ -532,10 +531,10 @@
     <res name="power">
         <model>
             <format>number</format>
-            <initial>2</initial>
+            <initial>0</initial>
         </model>
         <update>
-            <delay>10000</delay>
+            <delay>1</delay>
             <next>1</next>
 <!--            <rule>
                 <function name="sum" type="math_expression">
@@ -565,7 +564,7 @@
             </rule>
         </update>
     </res>
-{#    <res name="room:goal_security">
+    <res name="room:goal_security">
         <model>
             <format>number</format>
             <initial>0</initial>
@@ -577,8 +576,8 @@
                 null
             </rule>
         </update>
-    </res>#}
-{#    <res name="room:goal_comfort">
+    </res>
+    <res name="room:goal_comfort">
         <model>
             <format>number</format>
             <initial>0</initial>
@@ -590,7 +589,7 @@
                 null
             </rule>
         </update>
-    </res>#}
+    </res>
     <res name="room:goal_energy">
         <model>
             <format>number</format>
@@ -617,7 +616,7 @@
         </update>
     </res>
 
-{#    <res name="room:goal_effective_control">
+    <res name="room:goal_effective_control">
         <model>
             <format>number</format>
             <initial>0</initial>
@@ -629,7 +628,7 @@
                 null
             </rule>
         </update>
-    </res>#}
+    </res>
 
     <res name="room:goal_visual_comfort">
         <model>

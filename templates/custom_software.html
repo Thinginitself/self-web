@@ -5,32 +5,350 @@
 <div class="am-panel am-panel-default am-margin">
     <div class="am-panel-bd am-in">
         <form class="am-form" method="post" action="{{ url_for('op_add_res') }}" id="res_form">
-            
             <div class="am-g am-margin-top">
-                <div class="am-u-sm-8 am-u-md-4 am-text-right">
                 <strong>environment: <span id="res_environment">{{ pre_res_environment }}</span></strong>
-                </div>
             </div>
             <div class="am-g am-margin-top">
-                <div class="am-u-sm-4 am-u-md-2 am-text-right">
-                    name
+                <div class="am-u-sm-6">
+                    <textarea class="" rows="12" id="doc-ta-1"></textarea>
                 </div>
-                <div class="am-u-sm-8 am-u-md-4">
-
-                    {% if pre_res_name != 'default'%}
-                    <input type="text" class="am-input-sm" id="input_res_name" value="{{ pre_res_name }}" disabled>
-                    {% else %}
-                    <input type="text" class="am-input-sm" id="input_res_name">
-                    {% endif %}
-                </div>
-                <div class="am-hide-sm-only am-u-md-6">*必填，不可重复</div>
-            </div>
-            <div class="am-g am-margin-top">
-                <div class="am-u-sm-4 am-u-md-2 am-text-right">
-                    expression
-                </div>
-                <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
-                    <input type="text" class="am-input-sm" id="input_res_format">
+                <div class="am-u-sm-6">
+                    实例：
+                    <pre>{
+    "software": {
+        "feature": [
+            {
+                "window": [
+                    {
+                        "window.on": {
+                            "impact": {
+                                "related_property": "brightness",
+                                "effect": "+1"
+                            }
+                        }
+                    },
+                    {
+                        "window.off": {
+                            "impact": {
+                                "related_property": "brightness",
+                                "effect": "+0"
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "blind": [
+                    {
+                        "blind.on": {
+                            "impact": {
+                                "related_property": "brightness",
+                                "effect": "+1"
+                            }
+                        }
+                    },
+                    {
+                        "blind.off": {
+                            "impact": {
+                                "related_property": "brightness",
+                                "effect": "+0"
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "heater": [
+                    {
+                        "heater.level1": {
+                            "impact": {
+                                "related_property": "power",
+                                "effect": "+1"
+                            }
+                        }
+                    },
+                    {
+                        "heater.level2": {
+                            "impact": {
+                                "related_property": "power",
+                                "effect": "+2"
+                            }
+                        }
+                    },
+                    {
+                        "heater.level0": {
+                            "impact": {
+                                "related_property": "power",
+                                "effect": "+0"
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "light": [
+                    {
+                        "light.level1": [
+                            {
+                                "impact": {
+                                    "related_property": "brightness",
+                                    "effect": "+1"
+                                }
+                            },
+                            {
+                                "impact": {
+                                    "related_property": "power",
+                                    "effect": "+1"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "light.level2": [
+                            {
+                                "impact": {
+                                    "related_property": "brightness",
+                                    "effect": "+2"
+                                }
+                            },
+                            {
+                                "impact": {
+                                    "related_property": "power",
+                                    "effect": "+1.5"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "light.level0": [
+                            {
+                                "impact": {
+                                    "related_property": "brightness",
+                                    "effect": "+0"
+                                }
+                            },
+                            {
+                                "impact": {
+                                    "related_property": "power",
+                                    "effect": "+0"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "aircondition": [
+                    {
+                        "aircondition.power": [
+                            {
+                                "aircondition.power.on": {
+                                    "impact": {
+                                        "related_property": "power",
+                                        "effect": "+1"
+                                    }
+                                }
+                            },
+                            {
+                                "aircondition.power.off": {
+                                    "impact": {
+                                        "related_property": "power",
+                                        "effect": "+0"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "aircondition.mode": [
+                            {
+                                "aircondition.mode.cold": {
+                                    "impact": {
+                                        "related_property": "temperature",
+                                        "effect": "+1"
+                                    }
+                                }
+                            },
+                            {
+                                "aircondition.mode.warm": {
+                                    "impact": {
+                                        "related_property": "temperature",
+                                        "effect": "+0"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "computer": [
+                    {
+                        "computer.power": [
+                            {
+                                "computer.power.on": {
+                                    "impact": {
+                                        "related_property": "power",
+                                        "effect": "+1"
+                                    }
+                                }
+                            },
+                            {
+                                "computer.power.off": {
+                                    "impact": {
+                                        "related_property": "power",
+                                        "effect": "+0"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "computer.brightness": [
+                            {
+                                "computer.brightness.high": {
+                                    "impact": {
+                                        "related_property": "brightness",
+                                        "effect": "+3"
+                                    }
+                                }
+                            },
+                            {
+                                "computer.brightness.middle": {
+                                    "impact": {
+                                        "related_property": "brightness",
+                                        "effect": "+2"
+                                    }
+                                }
+                            },
+                            {
+                                "computer.brightness.low": {
+                                    "impact": {
+                                        "related_property": "brightness",
+                                        "effect": "+1"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "computer.volume": [
+                            {
+                                "computer.volume.high": {
+                                    "impact": {
+                                        "related_property": "volume",
+                                        "effect": "+3"
+                                    }
+                                }
+                            },
+                            {
+                                "computer.volume.middle": {
+                                    "impact": {
+                                        "related_property": "volume",
+                                        "effect": "+2"
+                                    }
+                                }
+                            },
+                            {
+                                "computer.volume.low": {
+                                    "impact": {
+                                        "related_property": "volume",
+                                        "effect": "+1"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "TV": [
+                    {
+                        "TV.power": [
+                            {
+                                "TV.power.on": {
+                                    "impact": {
+                                        "related_property": "power",
+                                        "effect": "+1"
+                                    }
+                                }
+                            },
+                            {
+                                "TV.power.off": {
+                                    "impact": {
+                                        "related_property": "power",
+                                        "effect": "+0"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "TV.brightness": [
+                            {
+                                "TV.brightness.high": {
+                                    "impact": {
+                                        "related_property": "brightness",
+                                        "effect": "+3"
+                                    }
+                                }
+                            },
+                            {
+                                "TV.brightness.middle": {
+                                    "impact": {
+                                        "related_property": "brightness",
+                                        "effect": "+2"
+                                    }
+                                }
+                            },
+                            {
+                                "TV.brightness.low": {
+                                    "impact": {
+                                        "related_property": "brightness",
+                                        "effect": "+1"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "TV.volume": [
+                            {
+                                "TV.volume.high": {
+                                    "impact": {
+                                        "related_property": "volume",
+                                        "effect": "+3"
+                                    }
+                                }
+                            },
+                            {
+                                "TV.volume.middle": {
+                                    "impact": {
+                                        "related_property": "volume",
+                                        "effect": "+2"
+                                    }
+                                }
+                            },
+                            {
+                                "TV.volume.low": {
+                                    "impact": {
+                                        "related_property": "volume",
+                                        "effect": "+1"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "constraint": [
+            {"type":"exclude","features":["window.on","aircondition.power.on"]},
+            {"type":"require","features":["aircondition.mode","aircondition.power.on"]}
+        ]
+    }
+}
+                    </pre>
                 </div>
             </div>
         </form>

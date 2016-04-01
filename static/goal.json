@@ -1,0 +1,14 @@
+{
+    "goal":[
+        {
+            "name":"energy_saving","weight":"0.3","related_property":{"name":"power","weight":"1"}
+        },
+        {
+            "name":"comfort","weight":"0.7",
+            "goal":[
+                {"name":"visual_comfort","weight":"0.5","related_property":{"name":"brightness","weight":"1"}},
+                {"name":"thermal_comfort","weight":"0.5","related_property":[{"name":"temperature","weight":"0.7"},
+                    {"name":"humidity","weight":"0.3"}]}]
+        }
+    ]
+}

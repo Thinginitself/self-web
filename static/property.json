@@ -1,0 +1,10 @@
+{
+    "property":[
+        {"name":"brightness","initial":0},
+        {"name":"humidity","initial":0},
+        {"name":"airquality","initial":0},
+        {"name":"volume","initial":0},
+        {"name":"power","initial":0},
+        {"name":"temperature","initial":0}
+    ]
+}

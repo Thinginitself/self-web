@@ -1,0 +1,106 @@
+    <res name="room:goal_overall">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+<!--    <res name="room:goal_security">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>#}
+    <res name="room:goal_comfort">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>-->
+    <res name="room:goal_energy">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="room:rule_id">
+        <model>
+            <format>string</format>
+            <initial>null</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>null</rule>
+        </update>
+    </res>
+
+<!--    <res name="room:goal_effective_control">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>-->
+
+    <res name="room:goal_visual_comfort">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+
+    <res name="room:goal_thermal_comfort">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>

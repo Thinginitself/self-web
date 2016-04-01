@@ -1,0 +1,132 @@
+<environment>
+    <res name="outside.temperature">
+        <model>
+            <format>
+                number
+            </format>
+            <initial>
+                2
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="data_list" type="others">
+                    <parameter name="data_list">[3,4,5,3,2,1]</parameter>
+                </function>
+
+            </rule>
+        </update>
+    </res>
+
+    <res name="time">
+        <model>
+            <format>string</format>
+            <initial>"daytime"</initial>
+        </model>
+        <update>
+            <delay>3</delay>
+            <next>3</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">["daytime","night"]</parameter>
+                    <parameter name="init_state">"daytime"</parameter>
+                    <parameter name="trans_matrix">[[0,1],[1,0]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="weather">
+        <model>
+            <format>
+                string
+            </format>
+            <initial>
+                "Sunny"
+            </initial>
+        </model>
+        <update>
+            <delay>6</delay>
+            <next>6</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">["Sunny","Snowy","Cloudy","Windy","Rainy"]</parameter>
+                    <parameter name="init_state">"Sunny"</parameter>
+                    <parameter name="trans_matrix">[[0,0,1,0,0],[0.2,0.2,0.2,0.2,0.2],[1,0,0,0,0],[0.2,0.2,0.2,0.2,0.2],[0.2,0.2,0.2,0.2,0.2]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="season">
+        <model>
+            <format>string</format>
+            <initial>"Spring"</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>720</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">["Spring","Summer","Autumn","Winter"]</parameter>
+                    <parameter name="init_state">"Spring"</parameter>
+                    <parameter name="trans_matrix">[[0,1,0,0],[0,0,1,0],[0,0,0,1],[1,0,0,0]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="somebodyhome">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>3</delay>
+            <next>3</next>
+            <rule>
+                <function name="markov_chain" type="probability">
+                    <parameter name="state_set">[1,0]</parameter>
+                    <parameter name="init_state">1</parameter>
+                    <parameter name="trans_matrix">[[0,1],[1,0]]</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="env.brightness">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">1</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="env.volume">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="simple_rand" type="probability">
+                    <parameter name="min">1</parameter>
+                    <parameter name="max">5</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+</environment>

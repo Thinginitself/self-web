@@ -5,20 +5,27 @@
 <div class="am-panel am-panel-default am-margin">
     <div class="am-panel-bd am-in">
         <form class="am-form" method="post" action="{{ url_for('op_add_res') }}" id="res_form">
-            
             <div class="am-g am-margin-top">
-                <div class="am-u-sm-8 am-u-md-4 am-text-right">
                 <strong>environment: <span id="res_environment">{{ pre_res_environment }}</span></strong>
-                </div>
             </div>
             <div class="am-g am-margin-top">
-                <div class="am-u-sm-4 am-u-md-2 am-text-right">
-                    name
+                <div class="am-u-sm-6">
+                    <textarea class="" rows="12" id="doc-ta-1"></textarea>
                 </div>
-                <div class="am-u-sm-8 am-u-md-4">
-                    <input type="text" class="am-input-sm" id="input_res_name">
+                <div class="am-u-sm-6">
+                    实例：
+                    <pre>{
+    "property":[
+        {"name":"brightness","initial":0},
+        {"name":"humidity","initial":0},
+        {"name":"airquality","initial":0},
+        {"name":"volume","initial":0},
+        {"name":"power","initial":0},
+        {"name":"temperature","initial":0}
+    ]
+}
+                    </pre>
                 </div>
-                <div class="am-hide-sm-only am-u-md-6">*必填，不可重复</div>
             </div>
         </form>
     </div>

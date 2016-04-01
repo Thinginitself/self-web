@@ -54,6 +54,11 @@ def teardown_request(exception):
         db.close()
     g.db.close()
 
+
+
+
+
+
 @app.route('/')
 @app.route('/environment_main')
 def view_environment_main():
@@ -230,12 +235,5 @@ def op_get_goal_values():
 if __name__ == '__main__':
     init_db()
     client.reset_res_pool()
-    '''
-    res_list = client.add_res_from_file("./static/reslist_view.xml")
-    goal_list = filter(lambda x : 'goal' in x, res_list)
-    for res in res_list:
-        if 'rule_id' in res:
-            res_rule_id = res
-    '''
     with app.app_context():
         app.run(port=5000,threaded=True)

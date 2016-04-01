@@ -1,4 +1,4 @@
-<res_list>
+ <res_list>
     <res name="outside.temperature">
         <model>
             <format>
@@ -553,6 +553,32 @@
     </res>
 
     <res name="room:goal_overall">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="room:goal_security">
+        <model>
+            <format>number</format>
+            <initial>0</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="room:goal_comfort">
         <model>
             <format>number</format>
             <initial>0</initial>

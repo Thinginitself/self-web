@@ -1,0 +1,28 @@
+{
+    "ruleset":[
+        {"event":"valueChange(brightness,4,5)","condition":"blind.off and time=daytime","action":"blind.on"},
+        {"event":"","condition":"aircondition.mode.cold","action":"aircondition.power.on and window.off and heater.level0"},
+        {"event":"","condition":"aircondition.mode.warm","action":"aircondition.power.on and window.off"},
+        {"event":"","condition":"aircondition.mode.warm and env.temperature>3","action":"heater.level0"},
+        {"event":"","condition":"!heater.level0","action":"window.off"},
+        {"event":"","condition":"aircondition.power.on and env.temperature>3","action":"aircondition.mode.cold"},
+        {"event":"","condition":"aircondition.power.on and env.temperature<3","action":"aircondition.mode.warm"},
+        {"event":"","condition":"light.level0 and time=daytime and somebodayhome=1","action":"blind.on"},
+        {"event":"","condition":"heater.level0 and temperature<2","action":"aircondition.power.on and aircondition.mode.warm"},
+        {"event":"","condition":"window.off and temperature<2","action":"heater.level1"}
+    ]
+}
+
+/*
+{"name":"context","policylist":[{"id":"001","type":"A","condition":"Res[aircondition.mode].value==\'cool\' ","action":"Capability.set_value(\'aircondition.power\',1);Capability.set_value(\'window\',0);Capability.set_value(\'heater.power\',0)"},
+{"id":"002","type":"A","condition":"Res[aircondition.mode].value==\'heat\'","action":"Capability.set_value(\'aircondition.power\',1);Capability.set_value(\'window\',0)"},
+{"id":"003","type":"A","condition":"Res[aircondition.mode].value==\'heat\' and Res[temperature].value > 3","action":"Capability.set_value(\'heater.power\',0)"},
+{"id":"004","type":"A","condition":"Res[heater.power].value == 1","action":"Capability.set_value(\'window\',0)"},
+{"id":"005","type":"A","condition":"Res[aircondition.power].value == 1 and Res[outside.temperature].value < 3","action":"Capability.set_value(\'aircondition.mode\',\'heat\')"},
+{"id":"006","type":"A","condition":"Res[aircondition.power].value == 1 and Res[outside.temperature].value > 3","action":"Capability.set_value(\'aircondition.mode\',\'cool\')"},
+{"id":"007","type":"A","condition":"Res[light.intensity].value == 0 and Res[time].value ==\'daytime\' and Res[somebodyhome].value == 1","action":"Capability.set_value(\'blind\',1)"},
+{"id":"008","type":"A","condition":"Res[light.intensity].value == 0 and Res[tv.power].value == 1","action":"Capability.set_value(\'tv.brightness\',2)"},
+{"id":"009","type":"A","condition":"Res[light.intensity].value == 0 and Res[computer.power].value == 1","action":"Capability.set_value(\'computer.brightness\',2)"},
+{"id":"010","type":"A","condition":"Res[heater.level].value == 0 and Res[temperature].value < 2","action":"Capability.set_value(\'aircondition.mode\',\'heat\');Capability.set_value(\'aircondition.power\',1)"},
+{"id":"011","type":"A","condition":"Res[window].value == 0 and Res[temperature].value < 2","action":"Capability.set_value(\'heater.level\',1);Capability.set_value(\'heater.power\',1)"}]}'
+*/

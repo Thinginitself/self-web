@@ -1,0 +1,216 @@
+<software>
+    <feature name="window">
+        <feature name="windows.on">
+            <impact>
+                <related_property>brightness</related_property>
+                <effect>+1</effect>
+            </impact>
+        </feature>
+        <feature name="windows.off">
+            <impact>
+                <related_property>brightness</related_property>
+                <effect>-1</effect>
+            </impact>
+        </feature>
+    </feature>
+
+    <feature name="blind">
+        <feature name="blind.on">
+            <impact>
+                <related_property>brightness</related_property>
+                <effect>+1</effect>
+            </impact>
+        </feature>
+        <feature name="blind.off">
+            <impact>
+                <related_property>brightness</related_property>
+                <effect>-1</effect>
+            </impact>
+        </feature>
+    </feature>
+
+    <feature name="heater">
+        <feature name="heater.level1">
+            <impact>
+                <related_property>power</related_property>
+                <effect>+1</effect>
+            </impact>
+        </feature>
+        <feature name="heater.level2">
+            <impact>
+                <related_property>power</related_property>
+                <effect>+2</effect>
+            </impact>
+        </feature>
+        <feature name="heater.level3">
+            <impact>
+                <related_property>power</related_property>
+                <effect>+3</effect>
+            </impact>
+        </feature>
+    </feature>
+
+    <feature name="light">
+        <range>{0,1,2}</range>
+        <initial>0</initial>
+        <impact>
+            <related_property>brightness</related_property>
+            <effect>+$light</effect>
+        </impact>
+        <impact>
+            <related_property>power</related_property>
+            <effect>+$light</effect>
+        </impact>
+    </feature>
+
+    <feature name="aircondition.mode">
+        <range>{-1,1}</range>
+        <initial>-1</initial>
+    </feature>
+
+    <feature name="aircondition.level">
+        <range>[16,30]</range>
+        <initial>20</initial>
+    </feature>
+
+    <feature name="aircondition.power">
+        <range>[-1,1]</range>
+        <initial>-1</initial>
+    </feature>
+
+    <res name="aircondition">
+        <model>
+            <format>
+                dict
+            </format>
+            <initial>
+                null
+            </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$aircondition.power</parameter>
+                    <parameter name="section">$aircondition.mode</parameter>
+                    <parameter name="section">$aircondition.level</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="computer.power">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="computer.brightness">
+        <model>
+            <format>number</format>
+            <initial>2</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="computer.volume">
+        <model>
+            <format>number</format>
+            <initial>3 </initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="computer">
+        <model>
+            <format>dict</format>
+            <initial>null</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$computer.power</parameter>
+                    <parameter name="section">$computer.brightness</parameter>
+                    <parameter name="section">$computer.volume</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+
+    <res name="tv.power">
+        <model>
+            <format>number</format>
+            <initial>1</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="tv.brightness">
+        <model>
+            <format>number</format>
+            <initial>3</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="tv.volume">
+        <model>
+            <format>number</format>
+            <initial>2</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                null
+            </rule>
+        </update>
+    </res>
+    <res name="tv">
+        <model>
+            <format>dict</format>
+            <initial>null</initial>
+        </model>
+        <update>
+            <delay>1</delay>
+            <next>1</next>
+            <rule>
+                <function name="combine" type="others">
+                    <parameter name="section">$tv.power</parameter>
+                    <parameter name="section">$tv.brightness</parameter>
+                    <parameter name="section">$tv.volume</parameter>
+                </function>
+            </rule>
+        </update>
+    </res>
+</software>

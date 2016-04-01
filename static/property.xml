@@ -1,0 +1,8 @@
+<property_list>
+    <property name="brightness"></property>
+    <property name="humidity"></property>
+    <property name="airquality"></property>
+    <property name="volume"></property>
+    <property name="power"></property>
+    <property name="temperature"></property>
+</property_list>
