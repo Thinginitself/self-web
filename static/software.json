@@ -1,100 +1,206 @@
 {
-    "software": {
-        "feature": [
-            {
-                "window":{
-                    "range":["on","off"],
-                    "impact":{"related_property":"brightness","effect": [1,0]}
-                }
-            },
-            {
-                "blind":{
-                    "range":["on","off"],
-                    "impact":{"related_property":"brightness","effect": [1,0]}
-                }
-            },
-            {
-                "heater":{
-                    "range":["level1","level2","level0"],
-                    "impact":{"related_property":"brightness","effect": [1,2,0]}
-                }
-            },
-            {
-                "light":{
-                    "range":["level1","level2","level0"],
-                     "impact":[{"related_property":"brightness","effect": [1,2,0]},
-                     {"related_property":"power","effect": [1,1.5,0]}]
-                }
-            },
-            {
-                "aircondition": [
-                    {
-                        "aircondition.power": {
-                            "range":["on","off"],
-                            "impact":{"related_property":"power","effect": [1,0]}
-                        }
-                    },
-                    {
-                        "aircondition.mode": {
-                            "range":["cool","warm"],
-                            "impact":{"related_property":"temperature","effect": [0,1]}
-                        }
-                    }
-                ]
-            },
-            {
-                "computer": [
-                    {
-                        "computer.power":{
-                            "range":["on","off"],
-                            "impact":{"related_property":"power","effect": [1,0]}
-                        }
-                    },
-                    {
-                        "computer.brightness":{
-                            "range":["high","middle","low"],
-                            "impact":{"related_property":"brightness","effect": [3,2,1]}
-                        }
-                    },
-                    {
-                        "computer.volume": {
-                            "range": ["high", "middle", "low"],
-                            "impact": {
-                                "related_property": "volume","effect": [3, 2, 1]}
-                        }
-                    }
-                ]
-            },
-            {
-                "TV": [
-                    {
-                        "TV.power":{
-                            "range":["on","off"],
-                            "impact":{"related_property":"power","effect": [1,0]}
-                        }
-                    },
-                    {
-                        "TV.brightness": {
-                            "range": ["high", "middle", "low"],
-                            "impact": {
-                                "related_property": "brightness",
-                                "effect": [3, 2, 1]
-                            }
-                        }
-                    },
-                    {
-                        "TV.volume":{
-                            "range": ["high", "middle", "low"],
-                            "impact": {
-                                "related_property": "volume","effect": [3, 2, 1]}
-                        }
-                    }
-                ]
-            }
+  "software": {
+    "feature": {
+      "window": {
+        "range": [
+          "on",
+          "off"
         ],
-        "constraint": [
-            {"type":"exclude","related_features":["window==\"on\"","aircondition.power==\"on\""]},
-            {"type":"require","related_features":["aircondition.mode==\"cool\"","aircondition.power==\"on\""]}
+        "impact": {
+          "related_property": "brightness",
+          "effect": [
+            1,
+            0
+          ]
+        }
+      },
+      "blind": {
+        "range": [
+          "on",
+          "off"
+        ],
+        "impact": {
+          "related_property": "brightness",
+          "effect": [
+            1,
+            0
+          ]
+        }
+      },
+      "heater": {
+        "range": [
+          "level1",
+          "level2",
+          "level0"
+        ],
+        "impact": {
+          "related_property": "brightness",
+          "effect": [
+            1,
+            2,
+            0
+          ]
+        }
+      },
+      "light": {
+        "range": [
+          "level1",
+          "level2",
+          "level0"
+        ],
+        "impact": [
+          {
+            "related_property": "brightness",
+            "effect": [
+              1,
+              2,
+              0
+            ]
+          },
+          {
+            "related_property": "power",
+            "effect": [
+              1,
+              1.5,
+              0
+            ]
+          }
         ]
+      },
+      "aircondition": {
+        "aircondition.power": {
+          "range": [
+            "on",
+            "off"
+          ],
+          "impact": {
+            "related_property": "power",
+            "effect": [
+              1,
+              0
+            ]
+          }
+        },
+        "aircondition.mode": {
+          "range": [
+            "cool",
+            "warm"
+          ],
+          "impact": {
+            "related_property": "temperature",
+            "effect": [
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "computer": {
+        "computer.power": {
+          "range": [
+            "on",
+            "off"
+          ],
+          "impact": {
+            "related_property": "power",
+            "effect": [
+              1,
+              0
+            ]
+          }
+        },
+        "computer.brightness": {
+          "range": [
+            "high",
+            "middle",
+            "low"
+          ],
+          "impact": {
+            "related_property": "brightness",
+            "effect": [
+              3,
+              2,
+              1
+            ]
+          }
+        },
+        "computer.volume": {
+          "range": [
+            "high",
+            "middle",
+            "low"
+          ],
+          "impact": {
+            "related_property": "volume",
+            "effect": [
+              3,
+              2,
+              1
+            ]
+          }
+        }
+      },
+      "TV": {
+        "TV.power": {
+          "range": [
+            "on",
+            "off"
+          ],
+          "impact": {
+            "related_property": "power",
+            "effect": [
+              1,
+              0
+            ]
+          }
+        },
+        "TV.brightness": {
+          "range": [
+            "high",
+            "middle",
+            "low"
+          ],
+          "impact": {
+            "related_property": "brightness",
+            "effect": [
+              3,
+              2,
+              1
+            ]
+          }
+        },
+        "TV.volume": {
+          "range": [
+            "high",
+            "middle",
+            "low"
+          ],
+          "impact": {
+            "related_property": "volume",
+            "effect": [
+              3,
+              2,
+              1
+            ]
+          }
+        }
+      }
     }
+  },
+  "constraint": [
+    {
+      "type": "exclude",
+      "related_features": [
+        "window==\"on\"",
+        "aircondition.power==\"on\""
+      ]
+    },
+    {
+      "type": "require",
+      "related_features": [
+        "aircondition.mode==\"cool\"",
+        "aircondition.power==\"on\""
+      ]
+    }
+  ]
 }

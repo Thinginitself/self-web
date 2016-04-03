@@ -218,6 +218,14 @@ def add_res(name, model, update):
     pass
 
 @sky_request
+def add_res_list(res_list):
+    """
+    add res in batch.
+    :param res_list: list of ((name, model, update))
+    :return:
+    """
+
+@sky_request
 def delete_res(name):
     pass
 
