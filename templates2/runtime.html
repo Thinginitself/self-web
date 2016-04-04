@@ -1,0 +1,101 @@
+{% extends 'base.html' %} {% block title %}runtime{% endblock %} {% block content %}
+
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">运行页面</strong> / <small>runtime</small></div>
+    </div>
+    <div class="am-g am-margin am-padding">
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main" style="height:400px"></div>
+        <!-- ECharts单文件引入 -->
+        <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+        <script type="text/javascript">
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line',
+                'echarts/chart/bar' 
+            ],
+            function(ec) {
+                // 基于准备好的dom，初始化echarts图表
+                myChart = ec.init(document.getElementById('main'));
+                ruleChart = ec.init(document.getElementById('rule_chart'));
+                refresh();
+            }
+        );
+        </script>
+    </div>
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-3'}">something<span class="am-icon-chevron-down am-fr"></span></div>
+                <div class="am-panel-bd">
+                     <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>average</th>
+                                <th>variance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="property">
+                            
+                        </tbody>
+                     </table>
+                                  
+                </div>
+
+            </div>
+        </div>
+    </div>
+        <div class="am-g">
+
+        <div class="am-u-md-6">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-3'}">System Control<span class="am-icon-chevron-down am-fr"></span></div>
+                <div class="am-panel-bd">
+
+                    <div class="am-form-group">
+                        <label for="clock" >Clock</label>
+                        <input type="number" class="" id="clock" value="0">
+                    </div>
+                    <div class="am-form-group">
+                        <label for="input_tick_interval">Step</label>
+                        <input type="number" class="" id="input_tick_interval" value="10000">
+                    </div>
+                    <button type="submit" class="am-btn am-btn-primary" onclick="update_tick_interval()" id="submit_botton">Submit</button>
+
+                    <p class=""></p>
+                    <div>
+                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="client_start()" disabled="disabled" id="start_clock_botton">Start Clock</button>
+                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="client_stop()" disabled="disabled" id="stop_clock_botton">Stop Clock</button>
+                        <button type="submit" class="am-btn am-btn-default am-btn-sm" onclick="ticktock_to_next_update()" >Tick</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="am-u-md-6">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}">Active Rules<span class="am-icon-chevron-down am-fr"></span></div>
+                <div id="collapse-panel-2" class="am-in">
+                        <div id="rule_chart" style="height:300px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="am-u-md-6">-->
+        <!--<label for="goal_aver">Average</label>-->
+	    <!--<textarea id="goal_aver" rows="1"></textarea>-->
+        <!--<label for="goal_std">StdDeviation</label>-->
+        <!--<textarea id="goal_std" rows="1"></textarea>-->
+    <!--</div>-->
+<!-- content end -->
+{% endblock %}

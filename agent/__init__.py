@@ -1,17 +1,34 @@
 from threading import Thread
 from time import sleep
 from agent import utility_helper
-
+#import utility_helper
 __author__ = 'root'
-
+import json
 import ResPool.client as client
 import os
 
 
 rolelist= utility_helper.Role_List()
-def Play_Role(jsonstring,res_attention): #
-    role= utility_helper.Role(jsonstring,res_attention)
+def Play_Role(jsonstring,res_attention,pr): #
+    role= utility_helper.Role(jsonstring,res_attention,pr)
     rolelist.Add_Role(role)
+
+
+def add_res(relist):
+    for re in relist:
+        for key in re:
+            t=type(re[key])
+            if t is str:
+                mo={}
+                mo["type"]="string"
+                mo["initial"]=re[key]
+
+            else:
+                mo={}
+                mo["type"]="number"
+                mo["initial"]=re[key]
+
+        client.add_res(str(key),mo,None)
 
 def Delete_Role(role):
     rolelist.Delete_Role(role)
@@ -56,7 +73,19 @@ str3='{"name":"context","policylist":[{"id":"001","type":"A","condition":"Res[bl
 str4='{"name":"context","policylist":[{"id":"001","type":"A","condition":"Res[aircondition.mode].value==\'cool\' ","action":"Capability.set_value(\'aircondition.power\',1);Capability.set_value(\'window\',0);Capability.set_value(\'heater.power\',0)"},{"id":"002","type":"A","condition":"Res[aircondition.mode].value==\'heat\'","action":"Capability.set_value(\'aircondition.power\',1);Capability.set_value(\'window\',0)"},{"id":"003","type":"A","condition":"Res[aircondition.mode].value==\'heat\' and Res[temperature].value > 3","action":"Capability.set_value(\'heater.power\',0)"},{"id":"004","type":"A","condition":"Res[heater.power].value == 1","action":"Capability.set_value(\'window\',0)"},{"id":"005","type":"A","condition":"Res[aircondition.power].value == 1 and Res[outside.temperature].value < 3","action":"Capability.set_value(\'aircondition.mode\',\'heat\')"},{"id":"006","type":"A","condition":"Res[aircondition.power].value == 1 and Res[outside.temperature].value > 3","action":"Capability.set_value(\'aircondition.mode\',\'cool\')"},{"id":"007","type":"A","condition":"Res[light.intensity].value == 0 and Res[time].value ==\'daytime\' and Res[somebodyhome].value == 1","action":"Capability.set_value(\'blind\',1)"},{"id":"008","type":"A","condition":"Res[light.intensity].value == 0 and Res[tv.power].value == 1","action":"Capability.set_value(\'tv.brightness\',2)"},{"id":"009","type":"A","condition":"Res[light.intensity].value == 0 and Res[computer.power].value == 1","action":"Capability.set_value(\'computer.brightness\',2)"},{"id":"010","type":"A","condition":"Res[heater.level].value == 0 and Res[temperature].value < 2","action":"Capability.set_value(\'aircondition.mode\',\'heat\');Capability.set_value(\'aircondition.power\',1)"},{"id":"011","type":"A","condition":"Res[window].value == 0 and Res[temperature].value < 2","action":"Capability.set_value(\'heater.level\',1);Capability.set_value(\'heater.power\',1)"}]}'
 #Play_Role(str)
 #Play_Role(str2)
-Play_Role(str4,['room:goal_visual_comfort','room:goal_thermal_comfort','room:goal_overall','room:goal_effective_control','room:goal_energy','aircondition.power','blind','window','weather','brightness','power','humidity','volume','light.intensity','heater.level','aircondition.mode','time','outside.temperature','aircondition.level'])
+
+chu=utility_helper.chushihua("room")
+#chu.show()
+
+#Play_Role(str4,['room:goal_visual_comfort','room:goal_thermal_comfort','room:goal_overall','room:goal_effective_control','room:goal_energy','aircondition.power','blind','window','weather','brightness','power','humidity','volume','light.intensity','heater.level','aircondition.mode','time','outside.temperature','aircondition.level'])
+#add_ziyuantoyuanzhukongjian(chu.relist)
+add_res(chu.relist)
+#print chu.relist
+#print "=======",client.get_res_value("brightness"),"====="
+#client.add_res("brightness",{"initial":0},None)
+#print "=======",client.get_res_value("brightness"),"====="
+Play_Role(json.dumps(chu.polist),chu.relist,chu.property)
+
 rolelist.Show()
 
 

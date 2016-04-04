@@ -8,6 +8,190 @@ Res_list={}
 res_cache={}
 res_buff={}
 poname_num={}
+
+class chushihua:
+    def __init__(self,name):
+        self.name=name
+        #self.str1=client.get_res_value(name+":ruleset",-1)
+        #self.str2=client.get_res_value(name+":software_model",-1)
+        #self.str3=client.get_res_value(poname_num+":goal_model",-1)
+
+        file_object = open("./static/ruleset.json")
+        try:
+            self.str1= file_object.read()
+        finally:
+            file_object.close()
+
+        file_object = open("./static/software.json")
+        try:
+            self.str2= file_object.read()
+        finally:
+            file_object.close()
+
+        file_object = open("./static/goal.json")
+        try:
+            self.str3= file_object.read()
+        finally:
+            file_object.close()
+
+        file_object = open("./static/property.json")
+        try:
+            self.str4= file_object.read()
+        finally:
+            file_object.close()
+
+        self.s1=json.loads(self.str1)
+
+        self.s2=json.loads(self.str2)
+        self.s3=json.loads(self.str3)
+        self.s4=json.loads(self.str4)
+        self.polist={}
+        self.relist=[]
+        self.property={}
+        self.fun1()
+        self.fun2(self.s2["software"]["feature"])
+        self.fun3(self.s3)
+        self.fun4()
+        #json.dump(self.polist)
+        print(self.relist)
+
+    def fun1(self):
+        popo=[]
+        num=0
+        for rule in self.s1["ruleset"]:
+            num=num+1
+            poli={}
+            poli["id"]=str(num)
+            poli["type"]="A"
+            strcon=self.changecon(rule["condition"])
+            strac=self.changeac(rule["action"])
+            poli["condition"]=strcon
+            poli["action"]=strac
+            popo.append(poli)
+
+        self.polist["name"]=self.name
+        self.polist["policylist"]=popo
+
+    def changecon(self,condition):
+        texts = condition.split("and")
+        ans="1==1"
+        for text in texts:
+            text.lstrip()
+            text.rstrip()
+            if "==" in text:
+                tt=text.split("==")
+                ans=ans+" and "+"Res["+tt[0]+"].value=="+tt[1]
+            elif ">=" in text:
+                tt=text.split(">=")
+                ans=ans+" and "+"Res["+tt[0]+"].value>="+tt[1]
+            elif "<=" in text:
+                tt=text.split("<=")
+                ans=ans+" and "+"Res["+tt[0]+"].value<="+tt[1]
+            elif ">" in text:
+                tt=text.split(">")
+                ans=ans+" and "+"Res["+tt[0]+"].value>"+tt[1]
+
+            elif "<" in text:
+                tt=text.split("<")
+                ans=ans+" and "+"Res["+tt[0]+"].value<"+tt[1]
+
+        return ans
+
+
+
+    def changeac(self,action):
+        texts=action.split("and")
+        ans=""
+        for text in texts:
+            text.lstrip()
+            text.rstrip()
+            tt=text.split("==")
+            ans=ans+"Capability.set_value(\'"+tt[0]+"\',"+tt[1]+");"
+
+        return ans
+
+    def fun2(self,fe):
+        for key in fe.keys():
+            if "range" in fe[key]:
+                lala={}
+                lala[key]=str(fe[key]["range"][0])
+
+                self.relist.append(lala)
+                self.add_property(key,fe[key])
+            else:
+                self.fun2(fe[key])
+
+    def add_property(self,key,value):
+
+        if type(value["impact"]) is list:
+            for im in value["impact"]:
+                guanxi={}
+                for index in range(len(im["effect"])):
+                    guanxi[value["range"][index]]=im["effect"][index]
+
+                if im["related_property"] not in self.property:
+                    self.property[im["related_property"]]={}
+
+                if key not in self.property[im["related_property"]]:
+                    self.property[im["related_property"]][key]={}
+                self.property[im["related_property"]][key]=guanxi
+
+        else:
+            guanxi={}
+            for index in range(len(value["impact"]["effect"])):
+                #print(value["impact"]["effect"][index])
+                guanxi[value["range"][index]]=value["impact"]["effect"][index]
+            if value["impact"]["related_property"] not in self.property:
+                self.property[value["impact"]["related_property"]]={}
+            if key not in self.property[value["impact"]["related_property"]]:
+                self.property[value["impact"]["related_property"]][key]={}
+            self.property[value["impact"]["related_property"]][key]=guanxi
+
+
+    def fun3(self,goal):
+        lala={}
+        lala[self.name+":goal"]=0
+        self.relist.append(lala)
+        for gg in goal["goal"]:
+            lala={}
+            lala[self.name+":"+gg["name"]]=0
+            self.relist.append(lala)
+            if "goal" in gg.keys():
+                self.fun3(gg)
+            else:
+                if type(gg["related_property"]) is list:
+                    for haha in gg["related_property"]:
+                        lala={}
+                        lala[haha["name"]]=0
+                        self.relist.append(lala)
+                else:
+                    lala={}
+                    lala[gg["related_property"]["name"]]=0
+                    self.relist.append(lala)
+
+    def fun4(self):
+        for prope in self.s4["property"]:
+            lala={}
+            lala[prope["name"]]=prope["initial"]
+            self.relist.append(lala)
+
+
+
+
+    def show(self):
+        print(self.polist)
+        print(self.relist)
+        print(self.property)
+
+
+
+
+
+
+
+
+
+
 class Res:
     def __init__(self,name,value=0):
         self.name=name
@@ -122,16 +306,18 @@ class Policy_List:
 class Role:
 
 
-    def __init__(self,jsontring,res_goal=[]):
+    def __init__(self,jsontring,res_goal=[],property={}):
 
         self.policylist=Policy_List()
+        self.property=property
         s=json.loads(jsontring)
         self.name=s["name"]
         Res_list[self.name]={}
         for rn in res_goal:
             #print rn
-            if rn not in Res_list[self.name]:
-                Res_list[self.name][rn]=Res(rn)
+            for key in rn.keys():
+                if key not in Res_list[self.name]:
+                    Res_list[self.name][key]=Res(key)
 
         for po in s["policylist"]:
             condition=po["condition"]
@@ -162,84 +348,71 @@ class Role:
 
 
     def goal(self):
-        lightintensity=Res_list[self.name]["light.intensity"].value
-        tvpower=Res_list[self.name]["tv.power"].value
-        computerpower=Res_list[self.name]["computer.power"].value
-        airconpower=Res_list[self.name]["aircondition.power"].value
-        heaterlevel=Res_list[self.name]["heater.level"].value
-        blind=Res_list[self.name]["blind"].value
-        time=Res_list[self.name]["time"].value
-        weather=Res_list[self.name]["weather"].value
-        outsidetemperature=Res_list[self.name]["outside.temperature"].value
-        airconlevel=Res_list[self.name]["aircondition.level"].value
+        self.property_jisuan()
+        #goal_dep= self.get_res_value(self.name+":goal_model")
+        file_object = open("./static/goal.json")
+        try:
+            str3= file_object.read()
+        finally:
+            file_object.close()
+        
+        self.goal_everyone(self.name+":goal",str3)
+
+    def property_jisuan(self):
+        for pro in self.property.keys():
+            ans=0
+            n=0
+            for ziyuan in self.property[pro].keys():
+                ans=ans+self.property[pro][ziyuan][self.get_res_value(ziyuan)]
+                n=n+1
+
+            ans=ans/n
+            print("asdfgrwefewfwefwwfw"+str(ans))
+            print(Res_list[self.name])
+            Res_list[self.name][str(pro)].set_value(ans)
 
 
+    def goal_jisuan(self,goal_name,property):
+        if goal_name not in Res_list[self.name]:
+            Res_list[self.name][goal_name]=Res(goal_name)
+        ans=0
 
-        if Res_list[self.name]["aircondition.mode"].value == "cool":
-            airmode=0
+        if type(property) is list:
+            for pp in property:
+                ans+=pp["weight"]*self.get_res_value(pp["name"])
         else:
-            airmode=1
-        window=Res_list[self.name]["window"].value
+            print(type(property["weight"]))
+            print("fhksahfksdahfkjhsadkjfhsadkhfksdhfd")
+            print(type(self.get_res_value(property["name"])))
+            ans=float(property["weight"])*self.get_res_value(property["name"])
 
-        power=lightintensity/3+tvpower+computerpower+airconpower+heaterlevel/3
-        if power > 5:
-            power=5
+        Res_list[self.name][goal_name].set_value(ans)
 
-        if time=="daytime":
-            if weather=="sunny":
-                brightness=lightintensity+blind*2
+    def goal_everyone(self,goal_name,str_json):
+        print(str_json)
+        s=json.loads(str_json)
+        if goal_name not in Res_list[self.name]:
+            Res_list[self.name][goal_name]=Res(goal_name)
+        ans=0
+        for gg in s["goal"]:
+            if "goal" in gg.keys():
+                self.goal_everyone(self.name+":"+gg["name"],gg)
+                ans+=gg["weight"]*self.get_res_value(self.name+":"+gg["name"])
             else:
-                brightness=lightintensity+blind
-        else:
-            brightness=lightintensity
-
-        if window == 1:
-            temperature=outsidetemperature+airconlevel*(airmode-0.5)*2/5+heaterlevel/5
-        else:
-            temperature=outsidetemperature+airconlevel*(airmode-0.5)*2/2+heaterlevel/2
+                self.goal_jisuan(gg["name"],gg["related_property"])
+                ans+=float(gg["weight"])*self.get_res_value(gg["name"])
 
 
-        intpower=int(power)
-        intbrightness=int(brightness)
-        inttemperature=int(temperature)
-        #client.set_res_value("temperature",temperature)
-        Res_list[self.name]["temperature"].set_value(temperature)
-        #client.set_res_value("power",intpower)
-        Res_list[self.name]["power"].set_value(intpower)
-        #client.set_res_value("brightness",intbrightness)
-        Res_list[self.name]["brightness"].set_value(intbrightness)
+        Res_list[self.name][goal_name].set_value(ans)
 
 
 
 
 
-        es=1-intpower/4
-        #client.set_res_value("room:goal_energy",es)
-        Res_list[self.name]["room:goal_energy"].set_value(es)
 
-        ec=intpower/2
-        if ec >1:
-            ec=1
-        #client.set_res_value("room:goal_effective_control",ec)
-        Res_list[self.name]["room:goal_effective_control"].set_value(ec)
 
-        if intbrightness<3:
-            vc=intbrightness/2
-        else:
-            vc=2.5-intbrightness/2
-        #client.set_res_value("room:goal_visual_comfort",vc)
-        Res_list[self.name]["room:goal_visual_comfort"].set_value(vc)
 
-        if inttemperature<=2:
-            tc=inttemperature/2
-        else:
-            tc=(5-inttemperature)/3
-        #client.set_res_value("room:goal_thermal_comfort",tc)
-        Res_list[self.name]["room:goal_thermal_comfort"].set_value(tc)
 
-        og=(es+ec+vc+tc)/4
-        #client.set_res_value("room:goal_overall",og)
-        Res_list[self.name]["room:goal_overall"].set_value(og)
 
 
 

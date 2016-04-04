@@ -16,37 +16,32 @@
     </ul>
     <div class="am-tabs-bd">
         <div class="am-tab-panel am-fade am-in am-active" id="tab1">
-            <table class="am-table am-table-striped am-table-hover table-main">
-                <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th>类型</th>
-                        <th>初值</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res_type, res_name, res_format, res_initial in resources %}
-                    {% if res_type == "resource" %}
-                    <tr>
-                        <th>{{ res_name }}</th>
-                        <td>{{ res_format }}</td>
-                        <td>{{ res_initial }}</td>
-                        <th>
-                            <div class="am-btn-toolbar">
-                                <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_res('default','{{ environment_name }}')">新建资源</button>
+            
+            {{ goal_data }}
+
+            <div class="am-margin">
+                <form method="post" action="/add_res_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="res_file" id="res_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="res-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#res_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#res-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab2">
@@ -60,8 +55,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for res_type, res_name, res_format, res_initial in resources %}
-                    {% if res_type == "property" %}
+                    {% for res_type, res_name, res_format, res_initial in resources %} {% if res_type == "property" %}
                     <tr>
                         <th>{{ res_name }}</th>
                         <td>{{ res_format }}</td>
@@ -75,44 +69,68 @@
                             </div>
                         </th>
                     </tr>
-                    {% endif %}
-                    {% endfor %}
+                    {% endif %} {% endfor %}
                 </tbody>
             </table>
-            <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_property('default','{{ environment_name }}')">新建property</button>
+            <div class="am-margin">
+                <form method="post" action="/add_property_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="property_file" id="property_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="property-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#property_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#property-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab3">
-            <table class="am-table am-table-striped am-table-hover table-main">
-                <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th>类型</th>
-                        <th>初值</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res_type, res_name, res_format, res_initial in resources %}
-                    <tr>
-                        <th>{{ res_name }}</th>
-                        <td>{{ res_format }}</td>
-                        <td>{{ res_initial }}</td>
-                        <th>
-                            <div class="am-btn-toolbar">
-                                <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_goal('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_goal('default','{{ environment_name }}')">新建目标</button>
+            goal
+            <br>
+            {% for goal, goal_dep in show_goal %}
+            |
+                {% for i in range(goal_dep) %}
+                ---
+                {% endfor %}
+                {{ goal }}
+            <br>
+            {% endfor %}   
+            <div class="am-margin">
+                <form method="post" action="/add_goal_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="goal_file" id="goal_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="goal-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#goal_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#goal-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab4">
@@ -143,8 +161,29 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="am-margin ">
-                <button type="button" class="am-btn am-btn-primary am-btn-xs" onclick="custom_software('default','{{ environment_name }}')">新建软件</button>
+            <div class="am-margin">
+                <form method="post" action="/add_software_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
+                    <div class="am-form-group am-form-file">
+                        <button type="button" class="am-btn am-btn-default am-btn-xs">
+                            <i class="am-icon-cloud-upload"></i> 点击选择文件</button>
+                        <input type="file" name="software_file" id="software_file" value="选择" onSelect="this.fileform.submit();" class="am-form-field" required/>
+                    </div>
+                    <div id="software-file-list"></div>
+                    <script>
+                    $(function() {
+                        $('#software_file').on('change', function() {
+                            var fileNames = '';
+                            $.each(this.files, function() {
+                                fileNames += '<p>' + this.name + '</p> ';
+                            });
+                            $('#software-file-list').html(fileNames);
+                        });
+                    });
+                    </script>
+                    <div class="am-cf ">
+                        <input type="submit" name="submit" value="上传" class="am-btn am-btn-secondary am-btn-xs " />
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -9,133 +9,44 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from werkzeug import secure_filename
-from ResPool import client, res_manager, utils
+from ResPool import client, res_manager, utils, Xutils
 import json
 from contextlib import closing
 
 
 # create our little application :)
 UPLOAD_FOLDER = './static'
-ALLOWED_EXTENSIONS = set(['txt', 'xml'])
+ALLOWED_EXTENSIONS = set(['json'])
 
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['DATABASE'] = "./self.db"
 
 
-
-res_list = []
-goal_list = []
 res_rule_id = 0
-
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-
-def init_db():
-    with closing(connect_db()) as db:
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
-
-def get_db():   
-    if not hasattr(g, 'db'):
-        g.db = connect_db()
-    return g.db
-
-@app.before_request
-def before_request():
-    g.db = connect_db()
-
-@app.teardown_request
-def teardown_request(exception):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
-    g.db.close()
-
-
-
+goal_list = []
+all_res = []
+goal_data = []
+show_goal = []
 
 
 
 @app.route('/')
 @app.route('/environment_main')
 def view_environment_main():
-    cur = g.db.execute('select distinct environment from entries')
-    environments = [row for row in cur.fetchall()]
-    entries = []
-    for j in environments:
-        i = j[0]
-        print i
-        num = g.db.execute('select count(*) from entries where environment = (?)', [i]).fetchall()[0][0]
-        entries.append([i,num])
-    return render_template('environment_main.html', entries=entries)
+    return render_template('environment_main.html')
+
+
 
 @app.route('/environment_list')
 def view_environment_list():
+
     environment_name = request.args.get("environment_name",'default')
-    cur = g.db.execute('select type, name, format, initial from entries where environment = (?) order by id desc', [environment_name])
-    setting_res = [row for row in cur.fetchall()]
+    return render_template('environment_list.html',environment_name=environment_name,show_goal=show_goal)
 
-    return render_template('environment_list.html', resources=setting_res, environment_name=environment_name)
-
-@app.route('/add_res', methods=['POST'])
-def op_add_res(): 
-    res_environment = request.form.get("res_environment")
-    res_name = request.form.get("res_name")
-    res_format = request.form.get("res_format")
-    res_initial = request.form.get("res_initial")
-    res_delay = request.form.get("res_delay")
-    res_next = request.form.get("res_next")
-    res_rule = request.form.get("res_rule")
-    res_type = request.form.get("res_type", "resource")
-    g.db.execute('insert into entries (environment, name, type, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?)',
-                 [res_environment, res_name, res_type, res_format, res_initial, res_delay, res_next, res_rule])
-    g.db.commit()
-    return redirect(url_for('view_environment_list'))
-
-@app.route('/del_res', methods=['POST'])
-def op_del_res():
-    del_res_name = request.form.get("del_res_name")
-    print del_res_name
-    g.db.execute("delete from entries where name = (?)", [del_res_name])
-    g.db.commit()
-    return redirect(url_for('view_environment_list'))
-
-@app.route('/environment_custom',methods=['POST', 'GET'])
-def view_environment_custom():
-    res_name = request.args.get("res_name","default")
-    res_environment = request.args.get("res_environment","home")
-    return render_template('environment_custom.html',pre_res_name=res_name,pre_res_environment=res_environment)
-
-@app.route('/custom_res',methods=['POST','GET'])
-def view_custom_res():
-    res_name = request.args.get("res_name","default")
-    res_environment = request.args.get("res_environment","home")
-    return render_template('custom_res.html',pre_res_name=res_name,pre_res_environment=res_environment)
-
-@app.route('/custom_property',methods=['POST','GET'])
-def view_custom_property():
-    res_name = request.args.get("res_name","default")
-    res_environment = request.args.get("res_environment","home")
-    return render_template('custom_property.html',pre_res_name=res_name,pre_res_environment=res_environment)
-
-
-@app.route('/custom_goal',methods=['POST','GET'])
-def view_custom_goal():
-    res_name = request.args.get("res_name","default")
-    res_environment = request.args.get("res_environment","home")
-    return render_template('custom_goal.html',pre_res_name=res_name,pre_res_environment=res_environment)
-
-
-@app.route('/custom_software',methods=['POST','GET'])
-def view_custom_software():
-    res_name = request.args.get("res_name","default")
-    res_environment = request.args.get("res_environment","home")
-    return render_template('custom_software.html',pre_res_name=res_name,pre_res_environment=res_environment)
-
-
+@app.route('/agent_choose')
+def view_agent_choose():
+    return render_template('agent_choose.html')
 
 @app.route('/runtime_choose')
 def view_choose():
@@ -169,29 +80,74 @@ def op_set_environment():
             res_rule_id = res
     return redirect(url_for('view_agent_choose'))
 
-@app.route('/add_setting_from_file',methods=['POST'])
-def op_add_setting_from_file():
-    file = request.files['file']
+@app.route('/add_res_from_file',methods=['POST'])
+def op_add_res_from_file():
+    file = request.files['res_file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        res_list = Xutils.get_res_list_from_environment_json(filepath)
+        for res in res_list:
+            print res
+            client.add_res(*res)
+            all_res.append(res[0])
+        print client.get_all_res_value(all_res,-1)
+    return redirect(url_for('view_environment_list'))
+
+@app.route('/add_property_from_file',methods=['POST'])
+def op_add_property_from_file():
+    file = request.files['property_file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        property_list = Xutils.get_res_list_from_property_json(filepath)
+        for res in property_list:
+            client.add_res(*res)
+            all_res.append(res[0])
+    return redirect(url_for('view_environment_list'))
+
+def get_goal_list(data):
+    print data
+    for tmp in data["goal"]:
+        goal_list.append("room:" + tmp["name"])
+        if "goal" in tmp.keys():
+            get_goal_list(tmp)
+
+def get_show_goal(data,dep):
+    for tmp in data["goal"]:
+        show_goal.append((tmp["name"],dep))
+        if "goal" in tmp.keys():
+            get_show_goal(tmp,dep+1)
+
+@app.route('/add_goal_from_file',methods=['POST'])
+def op_add_goal_from_file():
+    global goal_data
+    file = request.files['goal_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         with open(filepath, "r") as fin:
             context = fin.read()
-            data = utils.get_data_from_xml_context(context)
-        for res in data["res_list"]['res']:
-            g.db.execute('insert into entries (environment, name, type, format, initial, delay, next, rule) values (?, ?, ?, ?, ?, ?, ?, ?)',[file.filename, res["@name"], 'resource', res["model"]["format"], res["model"]["initial"], res["update"]["delay"], res["update"]["next"], json.JSONEncoder().encode(res["update"]["rule"])])
-            g.db.commit()
-    return redirect(url_for('view_environment_main'))
+            client.add_res("room:goal_model",{"initial":context},None)
+            goal_data = json.load(open(filepath))
+            get_goal_list(goal_data)
+            get_show_goal(goal_data,1)
+    return redirect(url_for('view_environment_list'))
 
-
-@app.route('/agent_choose', methods=['POST', 'GET'])
-def view_agent_choose():
-    if request.method == 'POST':
-        return redirect(url_for('view_runtime'))
-    return render_template('agent_choose.html')
-
-
+@app.route('/add_software_from_file',methods=['POST'])
+def op_add_software_from_file():
+    file = request.files['software_file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        with open(filepath, "r") as fin:
+            context = fin.read()
+            client.add_res("room:software_model",{"initial":context},None)
+    return redirect(url_for('view_environment_list'))
 
 @app.route('/runtime_main')
 def view_runtime():
@@ -199,7 +155,7 @@ def view_runtime():
 
 @app.route('/runtime_detail')
 def view_list():
-    res_vals = client.get_all_res_value(res_list, -1)
+    res_vals = client.get_all_res_value(all_res, -1)
     print res_vals
     return render_template('list.html',
                            resources=res_vals,
@@ -233,7 +189,6 @@ def op_get_goal_values():
     return json.dumps(ret)
 
 if __name__ == '__main__':
-    init_db()
     client.reset_res_pool()
     with app.app_context():
         app.run(port=5000,threaded=True)
