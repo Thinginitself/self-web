@@ -28,7 +28,9 @@ goal_list = []
 all_res = []
 goal_data = []
 show_goal = []
-
+show_software = []
+show_property = []
+show_environment = []
 
 
 @app.route('/')
@@ -42,7 +44,7 @@ def view_environment_main():
 def view_environment_list():
 
     environment_name = request.args.get("environment_name",'default')
-    return render_template('environment_list.html',environment_name=environment_name,show_goal=show_goal)
+    return render_template('environment_list.html',environment_name=environment_name,show_goal=show_goal,show_environment=show_environment,show_software=show_software,show_property=show_property)
 
 @app.route('/agent_choose')
 def view_agent_choose():
@@ -92,8 +94,11 @@ def op_add_res_from_file():
             print res
             client.add_res(*res)
             all_res.append(res[0])
+            show_environment.append({"label":res[0].encode()})
         print client.get_all_res_value(all_res,-1)
     return redirect(url_for('view_environment_list'))
+
+
 
 @app.route('/add_property_from_file',methods=['POST'])
 def op_add_property_from_file():
@@ -106,39 +111,69 @@ def op_add_property_from_file():
         for res in property_list:
             client.add_res(*res)
             all_res.append(res[0])
+            show_property.append({"label":res[0].encode()})
     return redirect(url_for('view_environment_list'))
 
 def get_goal_list(data):
-    print data
     for tmp in data["goal"]:
         goal_list.append("room:" + tmp["name"])
         if "goal" in tmp.keys():
             get_goal_list(tmp)
 
-def get_show_goal(data,dep):
+def get_show_goal(data):
+    my_list = []
     for tmp in data["goal"]:
-        show_goal.append((tmp["name"],dep))
+        new_one = dict()
+        new_one["label"] = "room:" + tmp["name"].encode()
         if "goal" in tmp.keys():
-            get_show_goal(tmp,dep+1)
+            new_one["children"] = get_show_goal(tmp)
+        if "related_property" in tmp.keys():
+            new_one["children"] = []
+            if type(tmp["related_property"])==list:
+                for i in tmp["related_property"]:
+                    new_one["children"].append({"label":i["name"].encode()})
+            else:
+                i = tmp["related_property"]
+                new_one["children"].append({"label":i["name"].encode()})
+        my_list.append(new_one)
+    return my_list
+
 
 @app.route('/add_goal_from_file',methods=['POST'])
 def op_add_goal_from_file():
-    global goal_data
+    global goal_data,show_goal
     file = request.files['goal_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         with open(filepath, "r") as fin:
-            context = fin.read()
-            client.add_res("room:goal_model",{"initial":context},None)
+            goal_context = fin.read()
+            client.add_res("room:goal_model",{"initial":goal_context},None)
             goal_data = json.load(open(filepath))
             get_goal_list(goal_data)
-            get_show_goal(goal_data,1)
+            show_goal = get_show_goal(goal_data)
+
     return redirect(url_for('view_environment_list'))
+
+def get_show_software(data):
+    my_list = []
+    for tmp in data.keys():
+        new_one = dict()
+        new_one["label"] = tmp.encode()
+        for i in data[tmp].keys():
+            if i=="range" or i=="impact":
+                continue
+            if not ("children" in new_one) :
+                new_one["children"] = []
+            new_one["children"].append({"label":i.encode()})
+        my_list.append(new_one)
+    return my_list
+
 
 @app.route('/add_software_from_file',methods=['POST'])
 def op_add_software_from_file():
+    global show_software
     file = request.files['software_file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -147,6 +182,9 @@ def op_add_software_from_file():
         with open(filepath, "r") as fin:
             context = fin.read()
             client.add_res("room:software_model",{"initial":context},None)
+            software_data = json.load(open(filepath))["software"]["feature"]
+            show_software =get_show_software(software_data)
+            print show_software
     return redirect(url_for('view_environment_list'))
 
 @app.route('/runtime_main')

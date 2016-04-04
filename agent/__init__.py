@@ -15,18 +15,18 @@ def Play_Role(jsonstring,res_attention,pr): #
 
 
 def add_res(relist):
-    for re in relist:
-        for key in re:
-            t=type(re[key])
-            if t is str:
-                mo={}
-                mo["type"]="string"
-                mo["initial"]=re[key]
+    for key in relist.keys():
 
-            else:
-                mo={}
-                mo["type"]="number"
-                mo["initial"]=re[key]
+        t=type(relist[key])
+        if t is str:
+            mo={}
+            mo["type"]="string"
+            mo["initial"]=relist[key]
+
+        else:
+            mo={}
+            mo["type"]="number"
+            mo["initial"]=relist[key]
 
         client.add_res(str(key),mo,None)
 

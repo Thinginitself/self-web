@@ -46,7 +46,7 @@ class chushihua:
         self.s3=json.loads(self.str3)
         self.s4=json.loads(self.str4)
         self.polist={}
-        self.relist=[]
+        self.relist={}
         self.property={}
         self.fun1()
         self.fun2(self.s2["software"]["feature"])
@@ -76,8 +76,8 @@ class chushihua:
         texts = condition.split("and")
         ans="1==1"
         for text in texts:
-            text.lstrip()
-            text.rstrip()
+            text=text.lstrip()
+            text=text.rstrip()
             if "==" in text:
                 tt=text.split("==")
                 ans=ans+" and "+"Res["+tt[0]+"].value=="+tt[1]
@@ -103,9 +103,12 @@ class chushihua:
         texts=action.split("and")
         ans=""
         for text in texts:
-            text.lstrip()
-            text.rstrip()
+            text=text.lstrip()
+            text=text.rstrip()
             tt=text.split("==")
+            #tt[0].lstrip()
+            #tt[0].rstrip()
+
             ans=ans+"Capability.set_value(\'"+tt[0]+"\',"+tt[1]+");"
 
         return ans
@@ -113,10 +116,10 @@ class chushihua:
     def fun2(self,fe):
         for key in fe.keys():
             if "range" in fe[key]:
-                lala={}
-                lala[key]=str(fe[key]["range"][0])
+                #lala={}
+                #lala[key]=str(fe[key]["range"][0])
 
-                self.relist.append(lala)
+                self.relist[key]=str(fe[key]["range"][0])
                 self.add_property(key,fe[key])
             else:
                 self.fun2(fe[key])
@@ -149,31 +152,36 @@ class chushihua:
 
 
     def fun3(self,goal):
-        lala={}
-        lala[self.name+":goal"]=0
-        self.relist.append(lala)
+        #lala={}
+        #lala[self.name+":goal"]=0
+        #self.relist.append(lala)
+        self.relist[self.name+":goal"]=0
         for gg in goal["goal"]:
-            lala={}
-            lala[self.name+":"+gg["name"]]=0
-            self.relist.append(lala)
+            #lala={}
+            #lala[self.name+":"+gg["name"]]=0
+            #self.relist.append(lala)
+            self.relist[self.name+":"+gg["name"]]=0
             if "goal" in gg.keys():
                 self.fun3(gg)
             else:
                 if type(gg["related_property"]) is list:
                     for haha in gg["related_property"]:
-                        lala={}
-                        lala[haha["name"]]=0
-                        self.relist.append(lala)
+                        #lala={}
+                        #lala[haha["name"]]=0
+                        #self.relist.append(lala)
+                        self.relist[haha["name"]]=0
                 else:
-                    lala={}
-                    lala[gg["related_property"]["name"]]=0
-                    self.relist.append(lala)
+                    #lala={}
+                    #lala[gg["related_property"]["name"]]=0
+                    #self.relist.append(lala)
+                    self.relist[gg["related_property"]["name"]]=0
 
     def fun4(self):
         for prope in self.s4["property"]:
-            lala={}
-            lala[prope["name"]]=prope["initial"]
-            self.relist.append(lala)
+            #lala={}
+            #lala[prope["name"]]=prope["initial"]
+            #self.relist.append(lala)
+            self.relist[prope["name"]]=prope["initial"]
 
 
 
@@ -306,18 +314,16 @@ class Policy_List:
 class Role:
 
 
-    def __init__(self,jsontring,res_goal=[],property={}):
+    def __init__(self,jsontring,res_goal={},property={}):
 
         self.policylist=Policy_List()
         self.property=property
         s=json.loads(jsontring)
         self.name=s["name"]
         Res_list[self.name]={}
-        for rn in res_goal:
-            #print rn
-            for key in rn.keys():
-                if key not in Res_list[self.name]:
-                    Res_list[self.name][key]=Res(key)
+        for key in res_goal.keys():
+            if key not in Res_list[self.name]:
+                Res_list[self.name][key]=Res(key)
 
         for po in s["policylist"]:
             condition=po["condition"]
@@ -356,7 +362,7 @@ class Role:
         finally:
             file_object.close()
         
-        self.goal_everyone(self.name+":goal",str3)
+        self.goal_everyone(self.name+":goal",json.loads(str3))
 
     def property_jisuan(self):
         for pro in self.property.keys():
@@ -379,7 +385,7 @@ class Role:
 
         if type(property) is list:
             for pp in property:
-                ans+=pp["weight"]*self.get_res_value(pp["name"])
+                ans+=float(pp["weight"])*self.get_res_value(pp["name"])
         else:
             print(type(property["weight"]))
             print("fhksahfksdahfkjhsadkjfhsadkhfksdhfd")
@@ -389,18 +395,19 @@ class Role:
         Res_list[self.name][goal_name].set_value(ans)
 
     def goal_everyone(self,goal_name,str_json):
-        print(str_json)
-        s=json.loads(str_json)
+        #print(str_json)
+        #s=json.loads(str_json)
+        s=str_json
         if goal_name not in Res_list[self.name]:
             Res_list[self.name][goal_name]=Res(goal_name)
         ans=0
         for gg in s["goal"]:
             if "goal" in gg.keys():
                 self.goal_everyone(self.name+":"+gg["name"],gg)
-                ans+=gg["weight"]*self.get_res_value(self.name+":"+gg["name"])
+                ans+=float(gg["weight"])*self.get_res_value(self.name+":"+gg["name"])
             else:
-                self.goal_jisuan(gg["name"],gg["related_property"])
-                ans+=float(gg["weight"])*self.get_res_value(gg["name"])
+                self.goal_jisuan(self.name+":"+gg["name"],gg["related_property"])
+                ans+=float(gg["weight"])*self.get_res_value(self.name+":"+gg["name"])
 
 
         Res_list[self.name][goal_name].set_value(ans)

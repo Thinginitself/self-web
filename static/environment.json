@@ -129,7 +129,7 @@
       },
       "update": {
         "delay": 1,
-        "next": 720,
+        "next": 3,
         "rule": {
           "function": {
             "name": "markov_chain",

@@ -16,9 +16,15 @@
     </ul>
     <div class="am-tabs-bd">
         <div class="am-tab-panel am-fade am-in am-active" id="tab1">
-            
-            {{ goal_data }}
-
+            <div id="environment_tree"></div>
+            <script>
+            var environment_data = {{ show_environment|safe }};
+            $(function() {
+                $('#environment_tree').tree({
+                    data: environment_data
+                });
+            });
+            </script>
             <div class="am-margin">
                 <form method="post" action="/add_res_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
@@ -45,33 +51,15 @@
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab2">
-            <table class="am-table am-table-striped am-table-hover table-main">
-                <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th>类型</th>
-                        <th>初值</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res_type, res_name, res_format, res_initial in resources %} {% if res_type == "property" %}
-                    <tr>
-                        <th>{{ res_name }}</th>
-                        <td>{{ res_format }}</td>
-                        <td>{{ res_initial }}</td>
-                        <th>
-                            <div class="am-btn-toolbar">
-                                <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_property('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    {% endif %} {% endfor %}
-                </tbody>
-            </table>
+            <div id="property_tree"></div>
+            <script>
+            var property_data = {{ show_property|safe }};
+            $(function() {
+                $('#property_tree').tree({
+                    data: property_data
+                });
+            });
+            </script>
             <div class="am-margin">
                 <form method="post" action="/add_property_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
@@ -98,16 +86,15 @@
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab3">
-            goal
-            <br>
-            {% for goal, goal_dep in show_goal %}
-            |
-                {% for i in range(goal_dep) %}
-                ---
-                {% endfor %}
-                {{ goal }}
-            <br>
-            {% endfor %}   
+            <div id="goal_tree"></div>
+            <script>
+            var goal_data = {{ show_goal|safe }};
+            $(function() {
+                $('#goal_tree').tree({
+                    data: goal_data
+                });
+            });
+            </script>
             <div class="am-margin">
                 <form method="post" action="/add_goal_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">
@@ -134,33 +121,15 @@
             </div>
         </div>
         <div class="am-tab-panel am-fade am-in am-active" id="tab4">
-            <table class="am-table am-table-striped am-table-hover table-main">
-                <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th>类型</th>
-                        <th>初值</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res_type, res_name, res_format, res_initial in resources %}
-                    <tr>
-                        <th>{{ res_name }}</th>
-                        <td>{{ res_format }}</td>
-                        <td>{{ res_initial }}</td>
-                        <th>
-                            <div class="am-btn-toolbar">
-                                <div class="am-btn-group am-btn-group-xs">
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="custom_software('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del_res('{{ res_name }}','{{ environment_name }}')"><span class="am-icon-trash-o"></span> 删除</button>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div id="software_tree"></div>
+            <script>
+            var software_data = {{ show_software|safe }};
+            $(function() {
+                $('#software_tree').tree({
+                    data: software_data
+                });
+            });
+            </script>
             <div class="am-margin">
                 <form method="post" action="/add_software_from_file" name="fileform" id="fileform" enctype="multipart/form-data" class="am-form">
                     <div class="am-form-group am-form-file">

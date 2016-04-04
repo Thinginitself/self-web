@@ -2,13 +2,15 @@
     "ruleset":[
         {"event":"valueChange(brightness,4,5)","condition":"blind==\"off\" and time==\"daytime\"","action":"blind==\"on\""},
         {"event":"","condition":"aircondition.mode==\"cold\"","action":"aircondition.power==\"on\" and window==\"off\" and heater==\"level0\""},
-        {"event":"","condition":"aircondition.mode==\"warm\"","action":"aircondition.power==\"on\" and window==\"off\""},
-        {"event":"","condition":"aircondition.mode==\"warm\" and env.temperature>3","action":"heater==\"level0\""},
-        {"event":"","condition":"!heater==\"level0\"","action":"window==\"off\""},
-        {"event":"","condition":"aircondition.power==\"on\" and env.temperature>3","action":"aircondition.mode==\"cold\""},
-        {"event":"","condition":"aircondition.power==\"on\" and env.temperature<3","action":"aircondition.mode==\"warm\""},
-        {"event":"","condition":"light==\"level0\" and time==\"daytime\" and somebodayhome==1","action":"blind==\"on\""},
-        {"event":"","condition":"heater==\"level0\" and temperature<2","action":"aircondition.power==\"on\" and aircondition.mode==\"warm\""},
-        {"event":"","condition":"window==\"off\" and temperature<2","action":"heater==\"level1\""}
+        {"event":"","condition":"env.temperature<3","action":"heater==\"level1\""},
+        {"event":"","condition":"env.temperature>=3","action":"heater==\"level0\""},
+        {"event":"","condition":"env.brightness>=3","action":"TV.brightness==\"high\" and TV.power==\"on\""},
+        {"event":"","condition":"env.brightness>=3","action":"TV.brightness==\"low\" and TV.power==\"off\""},
+        {"event":"","condition":"env.volume>=3","action":"computer.volume==\"high\" and computer.power==\"on\""},
+        {"event":"","condition":"env.volume<3","action":"computer.volume==\"low\" and computer.power==\"off\""},
+        {"event":"","condition":"season==\"Summer\"","action":"aircondition.mode==\"cool\""},
+        {"event":"","condition":"season==\"Winter\"","action":"aircondition.mode==\"warm\""},
+        {"event":"","condition":"time==\"daytime\"","action":"blind==\"on\""},
+        {"event":"","condition":"time==\"night\"","action":"blind==\"off\""}
     ]
 }
